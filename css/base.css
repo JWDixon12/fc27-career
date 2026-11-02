@@ -1,0 +1,128 @@
+/* Tokens, reset, type. Direction: "Theatre of Dreams" night match. Floodlit charcoal stands,
+   United red as the home colour, gold only for honours/captaincy/MOTM. */
+:root {
+  color-scheme: dark;
+  /* surfaces: night sky -> stand -> tier */
+  --night: #0c0d10;
+  --stand: #15171c;
+  --tier: #1d2027;
+  --tier-2: #262a33;
+  --rule: rgba(236, 231, 223, 0.09);
+  --rule-2: rgba(236, 231, 223, 0.16);
+  /* ink */
+  --chalk: #ece7df;
+  --ash: #b4afa6;
+  --mute: #858179;
+  /* club */
+  --red: #da291c;
+  --red-deep: #8f150c;
+  --gold: #fbe122;
+  /* data roles (validated with the dataviz script on the --stand surface) */
+  --home: #e0372a;
+  --away: #4f9bd9;
+  --c-league: #9085e9;
+  --c-europe: #199e70;
+  --c-cup: #c98500;
+  --good: #0ca30c;
+  --warn: #fab219;
+  --serious: #ec835a;
+  --crit: #d03b3b;
+  --grid: #2a2d35;
+  --axis: #3a3e48;
+  /* turf */
+  --turf: #10231a;
+  --turf-stripe: #13291f;
+  --turf-line: rgba(236, 231, 223, 0.32);
+
+  --f-display: 'Big Shoulders Display', 'Arial Narrow', Impact, sans-serif;
+  --f-text: 'Archivo', 'Segoe UI', system-ui, sans-serif;
+
+  --step--1: clamp(0.78rem, 0.76rem + 0.1vw, 0.84rem);
+  --step-0: clamp(0.9rem, 0.87rem + 0.15vw, 1rem);
+  --step-1: clamp(1.1rem, 1.02rem + 0.35vw, 1.3rem);
+  --step-2: clamp(1.4rem, 1.2rem + 0.8vw, 1.9rem);
+  --step-3: clamp(1.9rem, 1.5rem + 1.6vw, 3rem);
+  --step-4: clamp(2.6rem, 1.8rem + 3.4vw, 5.6rem);
+  --step-5: clamp(3.4rem, 2rem + 6vw, 9rem);
+
+  --gutter: clamp(16px, 2.2vw, 56px);
+  --gap: clamp(14px, 1.2vw, 28px);
+  --r-sm: 4px;
+  --r-md: 8px;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[hidden] { display: none !important; }
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 120px; }
+@media (min-width: 3000px) { html { font-size: 19px; } }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(1200px 520px at 12% -120px, rgba(255, 244, 214, 0.07), transparent 70%),
+    radial-gradient(1200px 520px at 88% -120px, rgba(255, 244, 214, 0.06), transparent 70%),
+    var(--night);
+  color: var(--chalk);
+  font-family: var(--f-text);
+  font-size: var(--step-0);
+  line-height: 1.5;
+  font-variation-settings: 'wdth' 92;
+  overflow-x: hidden;
+}
+
+/* film grain over everything, very faint */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+h1, h2, h3, h4 { margin: 0; font-family: var(--f-display); font-weight: 800; line-height: 0.95; letter-spacing: 0.005em; }
+h1 { font-size: var(--step-4); }
+h2 { font-size: var(--step-2); }
+h3 { font-size: var(--step-1); font-weight: 700; }
+p { margin: 0 0 0.8em; max-width: 70ch; }
+a { color: inherit; }
+img { display: block; max-width: 100%; }
+small { font-size: var(--step--1); }
+code { font-size: 0.9em; color: var(--ash); }
+button, input, select { font: inherit; color: inherit; }
+
+.num, td.n, .tabular { font-variant-numeric: tabular-nums; }
+
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; border-radius: 2px; }
+
+.skip {
+  position: absolute;
+  left: 8px;
+  top: -60px;
+  z-index: 200;
+  padding: 8px 12px;
+  background: var(--gold);
+  color: #111;
+  font-weight: 700;
+}
+.skip:focus { top: 8px; }
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
