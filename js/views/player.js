@@ -52,9 +52,9 @@
             <dl class="tiles"><div class="tile"><dt>Value</dt><dd>${U.money(p.value)}</dd></div>
               <div class="tile"><dt>Wage / week</dt><dd>${U.money(p.wage)}</dd></div>
               <div class="tile"><dt>Expires</dt><dd>${p.contractEnd}</dd><small>${seasonsLeft <= 1 ? 'Final season' : `${seasonsLeft} seasons left`}</small></div>
-              <div class="tile"><dt>Release</dt><dd>${p.releaseClause ? U.money(p.releaseClause) : 'None'}</dd></div></dl></section>
-          <section class="panel"><div class="panel-head"><h3>Overall history</h3><p class="sub">${hist.map((h) => `${U.date(h.date, 'short')}: ${h.ovr}`).join(' · ')}</p></div>
-            <div class="chart" id="pp-ovr"></div></section>
+              <div class="tile"><dt>Release</dt><dd>${p.releaseClause ? U.money(p.releaseClause) : 'No clause'}</dd></div></dl></section>
+          ${hist.length > 1 ? `<section class="panel"><div class="panel-head"><h3>Overall history</h3><p class="sub">${hist.map((h) => `${U.date(h.date, 'short')}: ${h.ovr}`).join(' · ')}</p></div>
+            <div class="chart" id="pp-ovr"></div></section>` : ''}
           <section class="panel pp-wide"><div class="panel-head"><h3>This season</h3><p class="sub">All competitions, captured matches</p></div>
             <dl class="tiles">${[['Apps', s.apps], ['Starts', s.starts], ['Minutes', U.num(s.mins)], ['Goals', s.goals], ['Assists', s.assists],
               ['Avg rating', s.avgRating ? s.avgRating.toFixed(2) : '—'], ['POTM', s.motm], ['Clean sheets', s.cleanSheets], ['Cards', `${s.yellows || 0} / ${s.reds || 0}`]]
@@ -87,7 +87,7 @@
       }
       const U = FC.u;
       const hist = p.ovrHistory || [];
-      if (hist.length) {
+      if (hist.length > 1) {
         FC.chart.mount(root.querySelector('#pp-ovr'), (w) => FC.chart.line({
           labels: hist.map((h) => U.date(h.date, 'short')), series: [{ name: 'Overall', color: 'var(--home)', values: hist.map((h) => h.ovr), area: true }],
           yMin: Math.min(...hist.map((h) => h.ovr)) - 2, yMax: Math.max(...hist.map((h) => h.ovr)) + 1, height: 150, label: 'Overall rating history',

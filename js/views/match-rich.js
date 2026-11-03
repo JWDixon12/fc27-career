@@ -81,7 +81,7 @@
     const v = st.view[tab] || VIEWS[tab][0][0];
     const fm = m.factsMaps[v];
     const label = (VIEWS[tab].find((x) => x[0] === v) || [])[1];
-    return `<div class="gm-side"><span class="gm-team">${esc(sideName(m, s))}</span>${FC.gp.map({ src: fm && fm[s], half: fm && fm.half, raw: st.raw, color, label: `${sideName(m, s)}: ${label}` })}</div>`;
+    return `<div class="gm-side"><span class="gm-team">${esc(sideName(m, s))}</span>${FC.gp.map({ src: fm && fm[s], half: fm && fm.half, raw: st.raw, color, label: `${sideName(m, s)}: ${label}`, blank: fm && fm.blank && fm.blank.includes(s) ? 'None this match' : '' })}</div>`;
   }
 
   function events(f, m) {

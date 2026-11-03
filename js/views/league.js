@@ -69,6 +69,7 @@
         <p class="sub">${c.type === 'europe' ? 'League phase. Only clubs tracked in this save are listed.' : ''}</p></div>${table(c.id, D().table[c.id], { compact: true })}</section>`).join('');
       const cups = others.filter((c) => c.type === 'cup' || (c.type === 'europe' && !D().table[c.id])).map((c) => cupPath(c.id)).join('');
       const md = rows.length ? rows[0].posHistory.length : 0;
+      const cupsSide = md < 2 && !otherTables;   // no bump chart and no other tables yet: the cup paths fill the side column
       return `<header class="page-head"><div><h1>${U.esc(league ? league.name : 'League')}</h1><p>${md ? `After matchday ${md}.` : 'Season not started.'} ${zoneText(league)}</p></div></header>
         ${md ? '' : `<div class="g12">
           <section class="panel" style="--span:7;--xl:6">${table(league.id, rows)}</section>
@@ -76,16 +77,16 @@
         <div class="g12 lg-grid" ${md ? '' : 'hidden'}>
           <div class="stack lg-main" style="--span:7"><section class="panel lg-table">${table(league.id, rows)}
             <p class="legend zone-key"><span><i class="sw" style="--c:var(--c-europe)"></i>Champions League</span><span><i class="sw" style="--c:var(--away)"></i>Europa League</span>${zonesOf(league).playoff ? '<span><i class="sw" style="--c:var(--gold)"></i>Play-off</span>' : ''}<span><i class="sw" style="--c:var(--crit)"></i>Relegation</span></p></section>
-            <div class="stack lg-cups">${cups}</div></div>
+            ${cupsSide ? '' : `<div class="stack lg-cups">${cups}</div>`}</div>
           <div class="stack ${md ? 'fill' : ''} lg-side" style="--span:5">
-            <section class="panel grow lg-bump-p"><div class="panel-head"><h2>Position by matchday</h2><p class="sub"></p></div><div class="chart" id="lg-bump"></div></section>
-            <div class="stack lg-other">${otherTables}</div></div>
+            ${md > 1 ? '<section class="panel grow lg-bump-p"><div class="panel-head"><h2>Position by matchday</h2><p class="sub"></p></div><div class="chart" id="lg-bump"></div></section>' : ''}
+            <div class="stack lg-other">${otherTables}${cupsSide ? cups : ''}</div></div>
         </div>`;
     },
     after(root) {
       const league = D().competitions.find((c) => c.type === 'league');
       const rows = D().table[league.id] || [];
-      if (!rows.length || !rows[0].posHistory.length) { const el = root.querySelector('#lg-bump'); if (el) el.innerHTML = '<p class="empty-note">Positions are plotted from matchday 1.</p>'; return; }
+      if (!root.querySelector('#lg-bump') || rows[0].posHistory.length < 2) return;   // a one-point bump chart says nothing
       const labels = rows[0].posHistory.map((_, i) => `MD${i + 1}`);
       FC.chart.mount(root.querySelector('#lg-bump'), (w, h) => FC.chart.bump(rows, labels, w, D().meta.clubId, h), { fill: true });
     },

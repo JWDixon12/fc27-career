@@ -98,7 +98,8 @@
     const U = FC.u;
     const t = FC.statsData.team(st.comp);
     const xg = root.querySelector('#st-xg');
-    if (xg && t.series.length) {
+    if (xg && t.series.length < 2) xg.closest('.st-sec').remove();   // one match is already in the xG tile; a one-dot line reads as broken
+    else if (xg) {
       FC.chart.mount(xg, (w) => FC.chart.line({ labels: t.series.map((x) => x.label), height: 240, fmt: (v) => v.toFixed(1), label: 'Expected goals for and against',
         tipTitle: (i) => `${esc(U.team(U.opponent(t.series[i].f)).name)} ${t.series[i].gf}–${t.series[i].ga}`,
         series: [{ name: 'xG for', color: 'var(--red)', values: t.series.map((x) => x.xgf) }, { name: 'xG against', color: 'var(--away)', values: t.series.map((x) => x.xga) }] }, w));
@@ -107,7 +108,7 @@
     if (race) {
       const list = FC.statsData.matches(st.comp);
       const top = FC.statsData.players(st.comp).filter((r) => r.goals > 0).sort((a, b) => b.goals - a.goals).slice(0, 3);
-      if (!top.length) { race.closest('.st-sec').remove(); return; }
+      if (!top.length || list.length < 2) { race.closest('.st-sec').remove(); return; }
       FC.chart.mount(race, (w) => FC.chart.line({ labels: list.map(({ f }) => U.team(U.opponent(f)).short), step: true, height: 240, label: 'Cumulative goals',
         series: top.map((r, i) => { let c = 0; return { name: U.player(r.id).short, color: ['var(--red)', 'var(--away)', '#d4af37'][i],
           values: list.map(({ m }) => { const ln = m.players.find((p) => p.id === r.id); c += ln ? ln.goals : 0; return c; }) }; }) }, w));
@@ -136,7 +137,7 @@
   FC.views.stats = {
     render() {
       const live = FC.stats.captured().length > 0;
-      return `<header class="page-head"><div><h1>Stats</h1><p>${live ? `${FC.stats.captured().length} matches captured, all competitions.` : `${esc(D().meta.season)} has not started.`}</p></div></header>
+      return `<header class="page-head"><div><h1>Stats</h1><p>${live ? `${FC.stats.captured().length} ${FC.stats.captured().length === 1 ? 'match' : 'matches'} captured, all competitions.` : `${esc(D().meta.season)} has not started.`}</p></div></header>
         ${live ? `<div id="st-ctl">${bar()}</div><div id="st-body"></div>` : preseason()}`;
     },
     after(root) {

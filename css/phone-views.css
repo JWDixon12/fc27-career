@@ -77,6 +77,7 @@
   /* league: compact table hides GF/GA columns */
   .league-table th:nth-child(8), .league-table td:nth-child(8), .league-table th:nth-child(9), .league-table td:nth-child(9) { display: none; }
   .league-table .who b { font-size: 13px; }
+  .league-table th small { display: none; }
 
   /* stats boards */
   .boards { grid-template-columns: 1fr; }

@@ -63,6 +63,7 @@
 .gp-slot.me { fill: #fff; stroke: var(--c); stroke-width: 5; }
 .gp-empty { display: none; position: absolute; inset: 0; place-items: center; color: var(--mute); font-size: var(--step--1); }
 .gp-missing .gp-empty { display: grid; }
+.gp-none { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 5px 12px; border-radius: 999px; background: rgba(11, 12, 15, 0.72); border: 1px solid rgba(236, 231, 223, 0.14); color: var(--ash); font: 600 12px/1.2 var(--f-text); letter-spacing: 0.02em; white-space: nowrap; }
 .gp figcaption { position: absolute; left: 0; right: 0; bottom: -26px; text-align: center; font-family: var(--f-display); font-weight: 700; color: var(--ash); letter-spacing: 0.02em; }
 .gp:has(figcaption) { margin-bottom: 30px; }
 .gp-goal { margin: 0 0 12px; }
@@ -118,7 +119,7 @@
 
 @media (max-width: 1100px) {
   .gm-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .gm-centre { grid-column: 1 / -1; grid-row: 1; }
+  .gm-centre { grid-column: 1 / -1; grid-row: 2; }
   .mp-wrap { grid-template-columns: 1fr; }
 }
 @media (max-width: 640px) {
@@ -129,7 +130,7 @@
   .mp-head { grid-template-columns: auto 1fr; }
   .mp-head .rring { grid-column: 1 / -1; justify-self: start; }
   .mp-body { grid-template-columns: 1fr; }
-  .subr li { grid-template-columns: 5.6em 1fr 2.4em 4.2em; gap: 6px; }
+  .subr li { grid-template-columns: 5.6em minmax(0, 1fr) 2.4em auto; gap: 6px; }
 }
 
 .mc-rich .sb-score small { white-space: nowrap; }

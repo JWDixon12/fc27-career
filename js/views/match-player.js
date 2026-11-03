@@ -17,7 +17,11 @@
   /** One pitch-ordered list per team: position, name, G/A marks, rating chip. */
   function table(m, side) {
     const list = m.players.filter((p) => p.side === side).sort((a, b) => ORDER.indexOf(a.pos) - ORDER.indexOf(b.pos));
-    const marks = (p) => `${p.goals ? `<i class="ga">${p.goals > 1 ? p.goals : ''}G</i>` : ''}${p.assists ? `<i class="ga">${p.assists > 1 ? p.assists : ''}A</i>` : ''}`;
+    const subIn = (p) => (m.events || []).find((e) => e.type === 'sub' && e.side === side && e.player === p.name);
+    const marks = (p) => {
+      const sub = subIn(p);
+      return `<span class="mp-marks">${sub ? `<i class="sub-in" title="On for ${esc(sub.playerOut || '')}">${sub.minute}'</i>` : ''}${p.goals ? `<i class="ga">${p.goals > 1 ? p.goals : ''}G</i>` : ''}${p.assists ? `<i class="ga">${p.assists > 1 ? p.assists : ''}A</i>` : ''}</span>`;
+    };
     const subs = (m.unusedSubs && m.unusedSubs[side]) || [];
     return `<div class="mp-team"><h3>${esc(m.sides[side].name)}</h3><ol class="mp-list">${list.map((p) => `<li><button type="button" class="mp-row ${p.key === st.key ? 'sel' : ''}" data-mp="${esc(p.key)}" aria-pressed="${p.key === st.key}">
       <span class="mp-pos">${esc(p.pos)}</span><b>${esc(p.name)}</b>${marks(p)}<span class="rating ${rClass(p.rating)}">${p.rating.toFixed(1)}</span></button></li>`).join('')}</ol>
@@ -37,12 +41,13 @@
     const color = p.side === 'home' ? 'var(--L)' : 'var(--R)';
     if (tab === 'goalkeeping') {
       return `<figure class="gp-goal"><img src="${esc(p.maps.gk_goal)}_raw.jpg" alt="Shots saved, goal view" loading="lazy"><figcaption>Shots saved</figcaption></figure>
-        ${FC.gp.map({ src: p.maps.gk_shots, half: true, color, caption: 'All shots faced', label: `${p.name}: shots faced` })}`;
+        ${FC.gp.map({ src: p.maps.gk_shots, half: true, color, caption: 'All shots faced', label: `${p.name}: shots faced`, blank: (p.blankMaps || []).includes('gk_shots') ? 'None this match' : '' })}`;
     }
     const key = TAB_MAP[tab];
     if (!p.maps[key]) return '<p class="empty-note">This map was not captured.</p>';
     const slots = tab === 'summary' && p.slot ? [...m.players.filter((q) => q.side === p.side && q.slot && q.key !== p.key).map((q) => ({ ...q.slot, label: `${q.pos} ${q.name}` })), { ...p.slot, me: true, label: `${p.pos} ${p.name}` }] : [];
-    return FC.gp.map({ src: p.maps[key], color, slots, caption: MAP_CAPTION[key], label: `${p.name}: ${MAP_CAPTION[key]}` });
+    const blank = (p.blankMaps || []).includes(key) ? 'None this match' : '';
+    return FC.gp.map({ src: p.maps[key], color, slots, blank, caption: MAP_CAPTION[key], label: `${p.name}: ${MAP_CAPTION[key]}` });
   }
 
   function panel(m) {

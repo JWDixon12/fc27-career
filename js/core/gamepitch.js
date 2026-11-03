@@ -45,7 +45,8 @@
 
   /**
    * A map figure: clean pitch + keyed overlay image (or the raw crop when raw=true).
-   * opts: { src (path without extension), half, raw, label, slots:[{x,y,me,label}], color, caption }
+   * opts: { src (path without extension), half, raw, label, slots:[{x,y,me,label}], color, caption,
+   *         blank (note shown when the game drew an empty map, e.g. no offsides) }
    */
   function map(opts) {
     const half = !!opts.half;
@@ -61,6 +62,7 @@
       ${img}
       ${dots ? `<svg class="gp-dots" viewBox="0 0 ${g.w} ${g.h}" preserveAspectRatio="none">${dots}</svg>` : ''}
       <span class="gp-empty">Map not captured</span>
+      ${opts.blank && !opts.raw ? `<span class="gp-none">${esc(opts.blank)}</span>` : ''}
       ${opts.caption ? `<figcaption>${esc(opts.caption)}</figcaption>` : ''}</figure>`;
   }
 

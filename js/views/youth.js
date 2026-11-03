@@ -18,7 +18,7 @@
           <div class="stack yo-scouts" style="--span:4">${Y.scouts.length ? '' : '<section class="panel"><h2>Scouts</h2><p class="empty-note">No scouts hired.</p></section>'}${Y.scouts.map((s) => `<section class="panel scout"><span class="scout-pin" aria-hidden="true"></span>
             <h2>${U.esc(s.name)}</h2><p class="scout-region">${U.esc(s.region)}</p>
             <dl><div><dt>Knowledge</dt><dd>${stars(s.knowledge, 5, 'Knowledge')}</dd></div><div><dt>Experience</dt><dd>${stars(s.experience, 5, 'Experience')}</dd></div></dl></section>`).join('')}</div>
-          <section class="panel yo-pros" style="--span:8"><div class="panel-head"><h2>Prospects</h2><p class="sub">Ages ${ages.length ? `${Math.min(...ages)}–${Math.max(...ages)}` : '—'}</p></div>
+          <section class="panel yo-pros" style="--span:8"><div class="panel-head"><h2>Prospects</h2><p class="sub">${ages.length ? `Ages ${Math.min(...ages)}–${Math.max(...ages)}` : ''}</p></div>
             ${prospects.length ? `<ol class="prospects">${prospects.map((p) => `<li><span class="pr-ovr">${p.ovr}</span><span class="face-fb" style="--s:46px" aria-hidden="true">${U.esc(U.initials(p.name))}</span>
               <div><b>${U.esc(p.name)}</b><small>${U.esc(p.nat)} · joined ${U.date(p.joined)}</small></div>
               <span class="pos-tag pg-${U.posGroup(p.pos)}">${U.esc(p.pos)}</span><span class="pr-age">${p.age}<small>yrs</small></span></li>`).join('')}</ol>` : '<p class="empty-note">No prospects in the youth squad.</p>'}</section>

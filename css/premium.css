@@ -176,7 +176,9 @@ table.data tbody tr:hover { background: rgba(242, 239, 233, 0.03); }
 .mp-pos { color: var(--mute); font: 600 11px/1 var(--f-text); letter-spacing: 0.04em; }
 .mp-row b { font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ga { font-style: normal; font: 700 11px/1 var(--f-text); color: var(--chalk); padding: 2px 4px; border: 1px solid var(--rule-2); border-radius: 4px; }
-.mp-row .ga + .ga { margin-left: -4px; }
+.mp-marks { display: inline-flex; align-items: center; gap: 4px; }
+.sub-in { font: 600 11px/1 var(--f-text); font-style: normal; color: var(--good); }
+.sub-in::before { content: '\2191'; margin-right: 1px; }
 .mp-subs { color: var(--mute); font-size: 12px; }
 .mp-panel { padding: 16px; }
 .mp-head { grid-template-columns: auto minmax(0, 1fr) auto; }
@@ -184,7 +186,7 @@ table.data tbody tr:hover { background: rgba(242, 239, 233, 0.03); }
 .mp-id h3 { font: 700 18px/1.25 var(--f-text); text-transform: none; }
 .mp-id h3 b { font-weight: 700; }
 .mp-meta { display: flex; gap: 6px; }
-.mp-rate { font: 800 48px/1 var(--f-display); }
+.mp-rate { font: 800 48px/1 var(--f-display); background: none; }
 .mp-rate.r-ok { color: var(--chalk); }
 .subr-track { height: 6px; border-radius: 0; }
 .subr-track i { border-radius: 0; background: var(--chalk) !important; }
