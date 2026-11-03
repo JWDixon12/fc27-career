@@ -77,8 +77,8 @@
           <h2>${esc(p.name)}</h2>
           <p class="pp-sub"><a class="club-link" href="#team/${club.id}">${U.crest(club.id, 20)}<span>${esc(club.name)}</span></a>${p.shirt ? ` · #${p.shirt}` : ''}</p></div>
         <div class="pp-ovr"><b>${p.ovr}</b><small>Overall</small></div></header>
-      <div class="pp-grid">${block(p, club.squad, club.name)}</div></article>`;
+      <div class="pp-grid">${block(p, club.squad, club.name)}${FC.history ? FC.history.block(p) : ''}</div></article>`;
   }
 
-  FC.attrs = { block, sheet, after() {}, band, squadAverage };
+  FC.attrs = { block, sheet, after(root, p) { if (FC.history) FC.history.bind(root, p); }, band, squadAverage };
 })();

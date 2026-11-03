@@ -5,7 +5,7 @@
   FC.views = FC.views || {};
   const TABS = [
     ['home', 'Club Home'], ['calendar', 'Calendar'], ['squad', 'Squad'], ['match', 'Match Centre'], ['stats', 'Stats'],
-    ['league', 'League'], ['transfers', 'Transfers'], ['finances', 'Financials'], ['youth', 'Youth Academy'], ['room', 'The Room'],
+    ['league', 'League'], ['transfers', 'Transfers'], ['finances', 'Financials'], ['youth', 'Youth Academy'], ['room', 'The Room'], ['leagues', 'Leagues'], ['search', 'Search'],
   ];
 
   function fail(msg) {

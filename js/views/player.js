@@ -47,7 +47,7 @@
             ${status}</div>
           <div class="pp-ovr"><b>${p.ovr}</b><small>Overall</small>${delta ? `<span class="${delta > 0 ? 'up' : 'down'}">${delta > 0 ? '▲' : '▼'} ${Math.abs(delta)} since ${U.date(hist[0].date, 'short')}</span>` : ''}</div>
         </header>
-        <div class="pp-grid">${FC.attrs ? FC.attrs.block(p, D().squad, 'Squad') : ''}
+        <div class="pp-grid">${FC.attrs ? FC.attrs.block(p, D().squad, 'Squad') : ''}${FC.history ? `<div class="hy-slot">${FC.history.block(p)}</div>` : ''}
           <section class="panel"><div class="panel-head"><h3>Contract</h3></div>
             <dl class="tiles"><div class="tile"><dt>Value</dt><dd>${U.money(p.value)}</dd></div>
               <div class="tile"><dt>Wage / week</dt><dd>${U.money(p.wage)}</dd></div>
@@ -74,6 +74,17 @@
     },
     after(root, p) {
       FC.playerSeason.bindStrip(root, p);
+      if (FC.history) FC.history.bind(root, p);
+      if (FC.history && p.hasHistory) {
+        // career history ships with the club file (kept out of career.js to keep the phone payload small)
+        FC.u.loadClub(window.CAREER.meta.clubId).then((c) => {
+          const full = c && c.squad.find((x) => x.id === p.id);
+          const slot = root.querySelector('.hy-slot');
+          if (!full || !full.history || !slot || !slot.isConnected) return;
+          slot.innerHTML = FC.history.block({ ...p, history: full.history });
+          FC.history.bind(slot, { ...p, history: full.history });
+        });
+      }
       const U = FC.u;
       const hist = p.ovrHistory || [];
       if (hist.length) {

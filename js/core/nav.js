@@ -14,10 +14,12 @@
     transfers: '<path d="M4 8h13l-3.5-3.5M20 16H7l3.5 3.5"/>',
     finances: '<rect x="3.5" y="6" width="17" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/><path d="M7 9.5v5M17 9.5v5"/>',
     youth: '<path d="M12 20v-8M12 12c0-4 2.5-6.5 7-7-.3 4.6-2.8 7-7 7zM12 14c0-3-2-5-5.5-5.5.2 3.6 2.3 5.5 5.5 5.5z"/>',
+    leagues: '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.5 2.4 3.6 5.3 3.6 8.5s-1.1 6.1-3.6 8.5c-2.5-2.4-3.6-5.3-3.6-8.5S9.5 5.9 12 3.5z"/>',
+    search: '<circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/>',
     room: '<path d="M4.5 6.5h15v9h-8l-4.5 4v-4h-2.5z"/>',
   };
   const MAIN = [['home', 'Home'], ['calendar', 'Fixtures'], ['squad', 'Squad'], ['match', 'Match']];
-  const MORE = [['stats', 'Stats'], ['league', 'League'], ['transfers', 'Transfers'], ['finances', 'Financials'], ['youth', 'Youth'], ['room', 'The Room']];
+  const MORE = [['leagues', 'Leagues'], ['search', 'Search'], ['stats', 'Stats'], ['league', 'League'], ['transfers', 'Transfers'], ['finances', 'Financials'], ['youth', 'Youth'], ['room', 'The Room']];
   const icon = (k) => `<svg viewBox="0 0 24 24" aria-hidden="true">${I[k]}</svg>`;
 
   function mount() {
