@@ -61,7 +61,7 @@
     const from = Math.max(0, Math.min(rows.length - 5, i - 2));
     return `<section class="sec"><div class="sec-head"><h2>${esc(U.league().name)}</h2><a class="sub" href="#league">Full table</a></div>
       <table class="data mini-table"><thead><tr><th class="n">#</th><th>Club</th><th class="n">P</th><th class="n">GD</th><th class="n">Pts</th></tr></thead><tbody>
-      ${rows.slice(from, from + 5).map((r, k) => `<tr class="${U.isUs(r.team) ? 'us' : ''}"><td class="n">${from + k + 1}</td><td><span class="who">${U.crest(r.team, 18)}${esc(U.team(r.team).name)}</span></td>
+      ${rows.slice(from, from + 5).map((r, k) => `<tr class="${U.isUs(r.team) ? 'us' : ''}"><td class="n">${from + k + 1}</td><td class="lt-club"><span class="who">${U.crest(r.team, 18)}<span class="nm-full">${esc(U.team(r.team).name)}</span><span class="nm-code">${esc(U.team(r.team).short)}</span></span></td>
         <td class="n">${r.p}</td><td class="n">${r.gf - r.ga > 0 ? '+' : ''}${r.gf - r.ga}</td><td class="n"><b>${r.pts}</b></td></tr>`).join('')}</tbody></table></section>`;
   }
 

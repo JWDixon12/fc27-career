@@ -95,6 +95,18 @@
     1824: '#9e0010', 1831: '#b8001a', 10029: '#1961b5', 10030: '#003a80', 100409: '#a8302c', 66: '#1c3f94', 191: '#b50e2a', 211: '#0b4ea2',
     219: '#1f7ea8', 327: '#2a2a2e', 700: '#7d6b00', 873: '#1a5aa8', 1873: '#b8001a' };
   const clubColor = (id) => (Number(id) === us() && D().club.colors ? D().club.colors.primary : CLUB_COLORS[Number(id)] || '#3a3a40');
+  const SHORT_ALIAS = { 'Olympique Lyonnais': 'Lyon', 'Olympique de Marseille': 'Marseille', 'Paris Saint-Germain': 'PSG', 'Manchester City': 'Man City',
+    'Manchester United': 'Man United', 'Bayer 04 Leverkusen': 'Leverkusen', 'Borussia Dortmund': 'Dortmund', 'Tottenham Hotspur': 'Spurs',
+    'Borussia Mönchengladbach': "M'gladbach", 'Real Madrid Castilla': 'Castilla', 'Wolverhampton Wanderers': 'Wolves', 'Newcastle United': 'Newcastle',
+    'Nottingham Forest': "Nott'm Forest", 'Brighton & Hove Albion': 'Brighton', 'West Ham United': 'West Ham', 'Atlético de Madrid': 'Atlético' };
+  const GENERIC = /^(?:FC|AFC|CF|SC|SV|VfB|VfL|TSG|FSV|RC|RCD|SD|UD|CD|AC|AS|SS|SSC|OGC|LOSC|SpVgg|1\.|FK|SK|CA|Club|Royal)\s+|\s+(?:FC|CF|AFC|SC|CP|AC|SD|BSC|\d{4})$/;
+  /** Compact club name for tight table cells: alias, else strip generic tokens. */
+  function shortenName(name) {
+    let n = SHORT_ALIAS[name] || String(name || '');
+    for (let i = 0; i < 3 && GENERIC.test(n); i++) n = n.replace(GENERIC, '');
+    return n.trim();
+  }
+  const shortName = (id) => { const t = team(id); const sn = t.shortName && t.shortName.length > 3 ? t.shortName : t.name; return shortenName(SHORT_ALIAS[t.name] || sn); };
   const hasClub = (id) => (D().clubIndex || []).includes(Number(id));
   /** Load data/clubs/<id>.js once (script injection works on file:// and static hosting). */
   const clubWaits = {};
@@ -163,7 +175,7 @@
     pos === 'GK' ? 'GK' : /B$|CB|WB/.test(pos) ? 'DEF' : /DM|CM|AM|^[LR]M$/.test(pos) ? 'MID' : 'ATT';
 
   FC.u = {
-    hasClub, loadClub, clubColor, esc, money, num, date, time12, parseDate, daysBetween, MONTHS, MONTHS_LONG, DAYS,
+    hasClub, loadClub, clubColor, shortName, shortenName, esc, money, num, date, time12, parseDate, daysBetween, MONTHS, MONTHS_LONG, DAYS,
     league, leagueRows, team, teamName, comp, player, personName, us, isUs, opponent, result, played, upcoming,
     initials, crest, portrait, flag, imgFail, compChip, resChip, resPill, goalsFor, apps, ghostCard, ratingClass, sum, posGroup,
   };

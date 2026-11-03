@@ -55,3 +55,59 @@
 .hy-table tbody tr:nth-child(even) td.hy-s, .hy-table tbody tr:nth-child(even) td.hy-sq { background: #19191b; }
 .hy-table tfoot tr td.hy-s, .hy-table tfoot tr td.hy-sq { background: var(--raised); }
 .hy-table tbody tr.hy-cur td.hy-s, .hy-table tbody tr.hy-cur td.hy-sq { background: #2a1717; }
+
+.hy-exp { padding: 2px 6px; border: 1px solid var(--rule-2); border-radius: 4px; background: none; color: var(--chalk); font: 600 12px/1.2 var(--f-text); cursor: pointer; }
+.hy-exp::after { content: ' ▾'; color: var(--mute); }
+.hy-exp[aria-expanded='true']::after { content: ' ▴'; }
+.hy-table tr.hy-part td { background: var(--page) !important; color: var(--ash); font-size: 12px; }
+.hy-table tr.hy-part td.hy-s, .hy-table tr.hy-part td.hy-sq { background: var(--page) !important; }
+.hy-cname { overflow: hidden; text-overflow: ellipsis; }
+.hy-table .hy-s { width: 66px; min-width: 66px; max-width: 66px; }
+.hy-table .hy-sq { left: 66px; }
+@media (max-width: 760px) {
+  .hy-table .hy-sq { min-width: 112px; max-width: 112px; width: 112px; }
+  .hy-club { max-width: 100px; }
+  .hy-table th, .hy-table td { padding: 7px 6px; }
+}
+
+.hy-comp { min-width: 0 !important; }
+@media (max-width: 760px) {
+  .hy-table .hy-age { display: none; }
+  .hy-table td.hy-comp, .hy-table th.hy-comp { max-width: 64px; overflow: hidden; text-overflow: ellipsis; }
+  .hy-table td.hy-comp .hy-exp { max-width: 62px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+}
+
+/* phone layout: one frozen column (season + crest), <= 64px */
+.hy-table.hy-phone .hy-f { position: sticky; left: 0; z-index: 1; width: 60px; min-width: 60px; max-width: 60px; padding: 6px 4px 6px 8px; background: var(--surf); box-shadow: 1px 0 0 var(--line); }
+.hy-table.hy-phone thead .hy-f { z-index: 2; }
+.hy-table.hy-phone tbody tr:nth-child(even) td.hy-f { background: #19191b; }
+.hy-table.hy-phone tfoot td.hy-f { background: var(--raised); }
+.hy-table.hy-phone tr.hy-cur td.hy-f { background: #2a1717; }
+.hy-table.hy-phone tr.hy-part td.hy-f { background: var(--page) !important; }
+.hy-fs { display: flex; align-items: center; gap: 6px; }
+.hy-fs b { font-weight: 700; font-size: 12px; }
+.hy-fs .crest, .hy-fs .crest-fb, .hy-fs .flag { width: 20px; height: 20px; flex: 0 0 20px; object-fit: contain; }
+.hy-table.hy-phone .hy-cl { color: var(--ash); white-space: nowrap; }
+.hy-table.hy-phone td.hy-comp, .hy-table.hy-phone th.hy-comp { max-width: 110px; }
+.hy-table.hy-phone th, .hy-table.hy-phone td { padding: 8px 7px; }
+.pp-grid > .hy-slot { grid-column: 1 / -1; min-width: 0; }
+@media (min-width: 761px) {
+  .hy-table .hy-s { width: 84px; min-width: 84px; max-width: 84px; white-space: nowrap; }
+  .hy-table .hy-sq { left: 84px; }
+}
+
+.hy-code { display: block; padding-left: 26px; color: var(--mute); font: 700 11px/1 var(--f-text); letter-spacing: 0.03em; }
+.hy-table.hy-phone tfoot .hy-fs { flex-direction: column; align-items: flex-start; gap: 2px; }
+.hy-table.hy-phone tfoot .hy-fs b { font-size: 11px; white-space: nowrap; }
+
+/* frozen-column rule for tables on phone: crest + 3-letter code, full name from tablet up */
+.nm-code { display: none; }
+@media (max-width: 760px) {
+  .nm-full { display: none; }
+  .nm-code { display: inline; font-weight: 700; letter-spacing: 0.02em; }
+  .league-table td.pos, .league-table th:first-child { position: sticky; left: 0; z-index: 1; background: var(--surf); width: 36px; min-width: 36px; max-width: 36px; box-sizing: border-box; }
+  .league-table td.lt-club, .league-table th:nth-child(3) { position: sticky; left: 36px; z-index: 1; background: var(--surf); box-shadow: 1px 0 0 var(--line); }
+  .league-table tr.us td.pos, .league-table tr.us td.lt-club { background: #2a1717; }
+  .league-table .mvc { display: none; }
+}
+@media (max-width: 760px) { .league-table thead th:nth-child(2) { display: none; } }

@@ -10,7 +10,7 @@
   const FC = (window.FC = window.FC || {});
   const esc = (s) => FC.u.esc(s);
   const TABS = [['all', 'All comps'], ['league', 'Domestic league'], ['cup', 'Domestic cups'], ['europe', 'International cups'], ['international', 'National team']];
-  const st = { tab: 'all', sort: null, dir: -1 };
+  const st = { tab: 'all', sort: null, dir: -1, open: new Set() };
   const num = (v) => (v == null || v === '' ? null : Number(v));
   const sum = (rows, k) => { const v = rows.map((r) => r[k]).filter((x) => x != null); return v.length ? v.reduce((a, b) => a + b, 0) : null; };
 
@@ -20,7 +20,7 @@
     if (!m) return { label: String(s), y: 0 };
     const y = Number(m[1]);
     const end = m[2] ? (m[2].length === 2 ? Number(String(y).slice(0, 2) + m[2]) : Number(m[2])) : null;
-    return { label: end && end !== y ? `${y}-${end}` : String(y), y };
+    return { label: end && end !== y ? `${y}-${String(end).slice(2)}` : String(y), y };
   }
 
   function ageAt(p, y) {
@@ -34,7 +34,8 @@
     const se = season(s.season);
     return { season: se.label, y: se.y, age: ageAt(p, se.y), club: s.club, country: s.country || null, comp: s.competition || '', type: s.compType || 'other',
       mp: num(s.apps), starts: num(s.starts), min: num(s.minutes), gls: num(s.goals), ast: num(s.assists), pk: num(s.pens != null ? s.pens : s.penalties),
-      crdy: num(s.yellows), crdr: num(s.reds), ga: num(s.conceded), cs: num(s.cleanSheets), saves: num(s.saves) };
+      crdy: num(s.yellows), crdr: num(s.reds), ga: num(s.conceded), cs: num(s.cleanSheets), saves: num(s.saves),
+      team: s.team || null, crest: s.crest || null, flag: s.flag || null };
   }
 
   /** "All comps" collapses each season + club into one row, like FBref. */
@@ -46,7 +47,7 @@
       by.get(k).parts.push(r);
     });
     return [...by.values()].map((g) => {
-      const out = { ...g, comp: g.parts.length > 1 ? `${g.parts.length} competitions` : g.parts[0].comp };
+      const out = { ...g, comp: g.parts.length > 1 ? `${g.parts.length} comps` : g.parts[0].comp };
       ['mp', 'starts', 'min', 'gls', 'ast', 'pk', 'crdy', 'crdr', 'ga', 'cs', 'saves'].forEach((k) => { out[k] = sum(g.parts, k); });
       return out;
     });
@@ -60,9 +61,10 @@
       ga90k: r.ga != null && n90 ? r.ga / n90 : null, csp: r.cs != null && r.mp ? (100 * r.cs) / r.mp : null };
   }
 
-  const OUT_COLS = [['mp', 'MP'], ['starts', 'Starts'], ['min', 'Min'], ['n90', '90s', 1], ['gls', 'Gls'], ['ast', 'Ast'], ['ga_', 'G+A'], ['gpk', 'G-PK'], ['pk', 'PK'],
+  // MP / Gls / Ast / G+A first so they are visible on a phone without scrolling
+  const OUT_COLS = [['mp', 'MP'], ['gls', 'Gls'], ['ast', 'Ast'], ['ga_', 'G+A'], ['starts', 'Starts'], ['min', 'Min'], ['n90', '90s', 1], ['gpk', 'G-PK'], ['pk', 'PK'],
     ['crdy', 'CrdY'], ['crdr', 'CrdR'], ['gls90', 'Gls/90', 2], ['ast90', 'Ast/90', 2], ['ga90', 'G+A/90', 2]];
-  const GK_COLS = [['mp', 'MP'], ['starts', 'Starts'], ['min', 'Min'], ['n90', '90s', 1], ['ga', 'GA'], ['ga90k', 'GA90', 2], ['saves', 'Saves'], ['cs', 'CS'], ['csp', 'CS%', 1],
+  const GK_COLS = [['mp', 'MP'], ['cs', 'CS'], ['ga', 'GA'], ['csp', 'CS%', 1], ['starts', 'Starts'], ['min', 'Min'], ['n90', '90s', 1], ['ga90k', 'GA90', 2], ['saves', 'Saves'],
     ['crdy', 'CrdY'], ['crdr', 'CrdR']];
   const BEST = new Set(['gls', 'ast', 'ga_', 'mp', 'min', 'cs', 'gls90', 'ga90']);
   const fmt = (v, dp) => (v == null ? '' : dp ? v.toFixed(dp) : FC.u.num(v));
@@ -77,10 +79,15 @@
     }
     return byName.get(String(c || '').toLowerCase()) || null;
   }
-  function clubCell(c) {
+  /** Squad cell: our crest (team id), a cached SoFIFA crest, a flag for national teams, else initials. */
+  function clubCell(c, r) {
     const U = FC.u;
-    const id = clubId(c);
-    return `<span class="hy-club">${id ? U.crest(id, 18) : `<span class="crest-fb" style="--s:18px" aria-hidden="true">${esc(U.initials(c || '?'))}</span>`}<span>${esc(id ? U.team(id).name : c || '')}</span></span>`;
+    const id = (r && r.team) || clubId(c);
+    const label = id ? U.team(id).name : String(c || '');
+    const img = id ? U.crest(id, 18)
+      : r && (r.crest || r.flag) ? `<img class="${r.flag ? 'flag' : 'crest'}" src="${esc(r.crest || r.flag)}" alt="" width="18" height="18" loading="lazy" onerror="this.remove()">`
+        : `<span class="crest-fb" style="--s:18px" aria-hidden="true">${esc(U.initials(label || '?'))}</span>`;
+    return `<span class="hy-club">${img}<span class="hy-cname">${esc(label)}</span></span>`;
   }
 
   function current(p) {
@@ -91,6 +98,23 @@
       ga: null, cs: p.pos === 'GK' ? s.cleanSheets : null, saves: null, current: true });
   }
 
+  const COMP_CODE = { 'Bundesliga': 'BL', '2. Bundesliga': 'BL2', 'DFB-Pokal': 'DFB', 'UEFA Champions League': 'UCL', 'Champions League': 'UCL',
+    'UEFA Europa League': 'UEL', 'Europa League': 'UEL', 'UEFA Conference League': 'UECL', 'LaLiga': 'LL', 'LaLiga2': 'LL2', 'Copa del Rey': 'CDR',
+    'Premier League': 'PL', 'FA Cup': 'FAC', 'EFL Cup': 'EFL', 'Supercopa': 'SUP', 'DFL-Supercup': 'SUP', 'Serie A': 'SA', 'Ligue 1': 'L1' };
+  /** Short competition code for the frozen phone column. */
+  const compCode = (c) => COMP_CODE[c] || String(c).split(/\s+/).filter((w) => /^[A-Z0-9]/.test(w)).map((w) => w[0]).join('').slice(0, 4) || String(c).slice(0, 4);
+  const phone = () => window.matchMedia && window.matchMedia('(max-width: 760px)').matches;
+  /** "2025-26" -> "25/26" for the frozen phone column. */
+  const shortSeason = (label) => { const m = /^(\d{4})-(\d{2})/.exec(label); return m ? `${m[1].slice(2)}/${m[2]}` : label; };
+  function crestOnly(r) {
+    const U = FC.u;
+    const id = (r && r.team) || clubId(r && r.club);
+    if (id) return U.crest(id, 20);
+    if (r && (r.crest || r.flag)) return `<img class="${r.flag ? 'flag' : 'crest'}" src="${esc(r.crest || r.flag)}" alt="" width="20" height="20" loading="lazy" onerror="this.remove()">`;
+    return `<span class="crest-fb" style="--s:20px" aria-hidden="true">${esc(U.initials(String((r && r.club) || '?')))}</span>`;
+  }
+  const clubShort = (r) => { const id = (r && r.team) || clubId(r && r.club); return id ? FC.u.shortName(id) : FC.u.shortenName(String((r && r.club) || '')); };
+
   function table(p) {
     const all = ((p.history && p.history.seasons) || []).map((s) => rowOf(s, p));
     let rows = st.tab === 'all' ? collapse(all.filter((r) => r.type !== 'international')) : all.filter((r) => r.type === st.tab);
@@ -100,28 +124,46 @@
     const cols = (gk ? GK_COLS : OUT_COLS).filter(([k]) => rows.some((r) => r[k] != null) || (cur && cur[k] != null));
     const showCountry = rows.some((r) => r.country);
     const showAge = rows.some((r) => r.age != null);
+    const ph = phone();
     if (st.sort) rows.sort((a, b) => ((a[st.sort] == null ? -1e9 : a[st.sort]) - (b[st.sort] == null ? -1e9 : b[st.sort])) * st.dir || b.y - a.y);
     else rows.sort((a, b) => b.y - a.y || String(a.comp).localeCompare(String(b.comp)));
     const best = {};
     cols.forEach(([k]) => { if (BEST.has(k)) best[k] = Math.max(...rows.map((r) => (r[k] == null ? -Infinity : r[k]))); });
     const th = (k, l, cls) => `<th class="${cls || 'n'}"${k ? ` data-hysort="${k}" aria-sort="${st.sort === k ? (st.dir > 0 ? 'ascending' : 'descending') : 'none'}"` : ''}>${k ? `<button type="button">${l}</button>` : l}</th>`;
     const cells = (r, isFoot) => cols.map(([k, , dp]) => `<td class="n${!isFoot && BEST.has(k) && r[k] != null && r[k] === best[k] && r[k] > 0 ? ' best' : ''}">${fmt(r[k], dp)}</td>`).join('');
-    const line = (r) => `<tr class="${r.current ? 'hy-cur' : ''}"><td class="hy-s">${esc(r.season)}</td><td class="hy-sq">${clubCell(r.club)}</td>${showAge ? `<td class="n">${r.age == null ? '' : r.age}</td>` : ''}
-      ${showCountry ? `<td>${esc(r.country || '')}</td>` : ''}<td class="hy-comp">${esc(r.comp)}</td>${cells(r)}</tr>`;
+    const key = (r) => `${r.season}|${r.club}`;
+    const compCell = (r) => (r.parts && r.parts.length > 1
+      ? `<button type="button" class="hy-exp" data-hyexp="${esc(key(r))}" aria-expanded="${st.open.has(key(r))}">${r.parts.length} comps</button>` : esc(r.comp));
+    // phone: one frozen column (season + crest), stats next, then comp + short club name
+    const head = ph
+      ? `${th('y', 'Season', 'hy-s hy-f')}${cols.map(([k, l]) => th(k, l)).join('')}${th(null, 'Comp', 'hy-comp')}${th(null, 'Club', 'hy-cl')}`
+      : `${th('y', 'Season', 'hy-s')}${th(null, 'Squad', 'hy-sq')}${showAge ? th('age', 'Age', 'n hy-age') : ''}${showCountry ? th(null, 'Country', '') : ''}${th(null, 'Comp', 'hy-comp')}${cols.map(([k, l]) => th(k, l)).join('')}`;
+    const lead = (r) => (ph
+      ? `<td class="hy-s hy-f"><span class="hy-fs">${crestOnly(r)}<b>${esc(r.current ? 'This' : shortSeason(r.season))}</b></span></td>`
+      : `<td class="hy-s">${esc(r.season)}</td><td class="hy-sq">${clubCell(r.club, r)}</td>${showAge ? `<td class="n hy-age">${r.age == null ? '' : r.age}</td>` : ''}${showCountry ? `<td>${esc(r.country || '')}</td>` : ''}<td class="hy-comp">${compCell(r)}</td>`);
+    const tail = (r) => (ph ? `<td class="hy-comp">${compCell(r)}</td><td class="hy-cl">${esc(r.current ? FC.u.shortName(window.CAREER.meta.clubId) : clubShort(r))}</td>` : '');
+    const partRow = (x) => (ph
+      ? `<tr class="hy-part"><td class="hy-s hy-f"><span class="hy-code" title="${esc(x.comp)}">${esc(compCode(x.comp))}</span></td>${cells(x, true)}<td class="hy-comp">${esc(x.comp)}</td><td class="hy-cl"></td></tr>`
+      : `<tr class="hy-part"><td class="hy-s"></td><td class="hy-sq"></td>${showAge ? '<td class="hy-age"></td>' : ''}${showCountry ? '<td></td>' : ''}<td class="hy-comp">${esc(x.comp)}</td>${cells(x, true)}</tr>`);
+    const line = (r) => `<tr class="${r.current ? 'hy-cur' : ''}">${lead(r)}${cells(r)}${tail(r)}</tr>`
+      + (r.parts && r.parts.length > 1 && st.open.has(key(r)) ? r.parts.map((x) => partRow(derive(x))).join('') : '');
     const clubs = new Map();
     rows.forEach((r) => { if (!clubs.has(String(r.club))) clubs.set(String(r.club), []); clubs.get(String(r.club)).push(r); });
     const foot = (label, club, rs) => {
       const agg = derive({ mp: sum(rs, 'mp'), starts: sum(rs, 'starts'), min: sum(rs, 'min'), gls: sum(rs, 'gls'), ast: sum(rs, 'ast'), pk: sum(rs, 'pk'),
         crdy: sum(rs, 'crdy'), crdr: sum(rs, 'crdr'), ga: sum(rs, 'ga'), cs: sum(rs, 'cs'), saves: sum(rs, 'saves') });
-      return `<tr class="hy-foot"><td class="hy-s">${esc(label)}</td><td class="hy-sq">${club ? clubCell(club) : ''}</td>${showAge ? '<td></td>' : ''}${showCountry ? '<td></td>' : ''}<td class="hy-comp"></td>${cells(agg, true)}</tr>`;
+      if (ph) {
+        return `<tr class="hy-foot"><td class="hy-s hy-f"><span class="hy-fs">${club ? crestOnly(rs[0]) : ''}<b>${esc(club ? label.replace(' Seasons', ' seas.').replace(' Season', ' seas.') : 'Career')}</b></span></td>${cells(agg, true)}<td class="hy-comp"></td><td class="hy-cl">${club ? esc(clubShort(rs[0])) : esc(label)}</td></tr>`;
+      }
+      return `<tr class="hy-foot"><td class="hy-s">${esc(label)}</td><td class="hy-sq">${club ? clubCell(club, rs[0]) : '<b>Career</b>'}</td>${showAge ? '<td class="hy-age"></td>' : ''}${showCountry ? '<td></td>' : ''}<td class="hy-comp"></td>${cells(agg, true)}</tr>`;
     };
     const seasonsOf = (rs) => new Set(rs.map((r) => r.season)).size;
+    const plural = (n) => `${n} Season${n === 1 ? '' : 's'}`;
     if (!rows.length && !cur) return '<p class="empty-note">No matches in this competition type.</p>';
-    return `<div class="table-wrap hy-wrap"><table class="data hy-table"><thead><tr>${th('y', 'Season', 'hy-s')}${th(null, 'Squad', 'hy-sq')}${showAge ? th('age', 'Age') : ''}${showCountry ? th(null, 'Country', '') : ''}${th(null, 'Comp', 'hy-comp')}
-      ${cols.map(([k, l]) => th(k, l)).join('')}</tr></thead><tbody>${cur ? line(cur) : ''}${rows.map(line).join('')}</tbody>
-      <tfoot>${clubs.size > 1 ? [...clubs.entries()].map(([c, rs]) => foot(`${seasonsOf(rs)} Season${seasonsOf(rs) === 1 ? '' : 's'}`, c, rs)).join('') : ''}
-      ${foot(`${seasonsOf(rows)} Season${seasonsOf(rows) === 1 ? '' : 's'}`, null, rows).replace('<td class="hy-sq"></td>', `<td class="hy-sq"><b>Career</b></td>`)}</tfoot></table></div>`;
+    return `<div class="table-wrap hy-wrap"><table class="data hy-table ${ph ? 'hy-phone' : ''}"><thead><tr>${head}</tr></thead><tbody>${cur ? line(cur) : ''}${rows.map(line).join('')}</tbody>
+      <tfoot>${clubs.size > 1 ? [...clubs.entries()].map(([c, rs]) => foot(plural(seasonsOf(rs)), c, rs)).join('') : ''}${foot(plural(seasonsOf(rows)), null, rows)}</tfoot></table></div>`;
   }
+
 
   function chart(p) {
     const by = {};
@@ -143,7 +185,7 @@
   function block(p) {
     const has = p.history && p.history.seasons && p.history.seasons.length;
     if (!has && !(p.season && p.season.apps)) return '';
-    st.sort = null; st.dir = -1;
+    st.sort = null; st.dir = -1; st.open.clear();
     if (has && !p.history.seasons.some((s) => st.tab === 'all' || s.compType === st.tab)) st.tab = 'all';
     const types = new Set(((p.history && p.history.seasons) || []).map((s) => s.compType));
     if (!st.tab) st.tab = 'all';
@@ -159,7 +201,11 @@
     box.addEventListener('click', (e) => {
       const t = e.target.closest('[data-hytab]');
       const h = e.target.closest('[data-hysort]');
-      if (t) {
+      const x = e.target.closest('[data-hyexp]');
+      if (x) {
+        const k = x.dataset.hyexp;
+        if (st.open.has(k)) st.open.delete(k); else st.open.add(k);
+      } else if (t) {
         st.tab = t.dataset.hytab; st.sort = null;
         box.querySelectorAll('[data-hytab]').forEach((x) => x.setAttribute('aria-pressed', String(x === t)));
       } else if (h) {

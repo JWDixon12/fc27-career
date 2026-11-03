@@ -28,7 +28,7 @@
       const gd = r.gf - r.ga;
       return `<tr class="${U.isUs(r.team) ? 'us' : ''} ${zone(i, rows.length, c)}"${U.hasClub(r.team) ? ` data-href="team/${r.team}" tabindex="0"` : ''}>
         <td class="n pos">${now}</td><td class="mvc">${mv}</td>
-        <td><span class="who">${U.crest(r.team, 26)}<b>${U.esc(U.team(r.team).name)}</b></span></td>
+        <td class="lt-club"><span class="who">${U.crest(r.team, 26)}<b class="nm-full">${U.esc(U.team(r.team).name)}</b><b class="nm-code">${U.esc(U.team(r.team).short)}</b></span></td>
         <td class="n">${r.p}</td><td class="n">${r.w}</td><td class="n">${r.d}</td><td class="n">${r.l}</td>
         <td class="n">${r.gf}</td><td class="n">${r.ga}</td><td class="n">${gd > 0 ? '+' : ''}${gd}</td><td class="n pts">${r.pts}</td>
         ${o.compact ? '' : `<td><span class="form">${r.form.split('').map((x) => U.resChip({ res: x })).join('')}</span></td>`}</tr>`;
