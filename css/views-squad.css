@@ -150,3 +150,5 @@
 .hs-thumb img { aspect-ratio: 608 / 811; object-fit: contain; background: #12261b; border-radius: 3px; }
 .hs-thumb[aria-pressed='true'], .hs-all[aria-pressed='true'] { border-color: var(--gold); color: var(--chalk); }
 .hs-thumb:hover, .hs-all:hover { border-color: var(--rule-2); }
+.pp-caps { color: inherit; opacity: 0.8; white-space: nowrap; }
+.pp-nat { display: inline-flex; align-items: center; gap: 6px; }

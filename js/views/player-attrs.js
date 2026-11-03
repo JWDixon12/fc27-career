@@ -75,7 +75,7 @@
       <header class="pp-head club-field" style="--club:${U.clubColor(club.id)}">${U.portrait(face, 200, 'pp-face')}
         <div class="pp-id"><p class="pp-pos"><span class="pos-tag">${esc(p.pos)}</span> ${(p.altPos || []).map((x) => `<span class="pos-tag">${esc(x)}</span>`).join(' ')}</p>
           <h2>${esc(p.name)}</h2>
-          <p class="pp-sub"><a class="club-link" href="#team/${club.id}">${U.crest(club.id, 20)}<span>${esc(club.name)}</span></a>${p.shirt ? ` · #${p.shirt}` : ''}</p></div>
+          <p class="pp-sub"><a class="club-link" href="#team/${club.id}">${U.crest(club.id, 20)}<span>${esc(club.name)}</span></a>${p.nat ? `<span class="pp-nat">${U.flag(p)}${esc(p.nat)}${U.caps(p)}</span>` : ''}${p.shirt ? ` · #${p.shirt}` : ''}</p></div>
         <div class="pp-ovr"><b>${p.ovr}</b><small>Overall</small></div></header>
       <div class="pp-grid">${block(p, club.squad, club.name)}${FC.history ? FC.history.block(p) : ''}</div></article>`;
   }

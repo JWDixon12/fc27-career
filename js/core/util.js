@@ -154,6 +154,13 @@
     if (!p || !p.portrait) return `<span class="face-fb" style="--s:${sz}px" aria-hidden="true">${fb}</span>`;
     return `<img class="face ${extra || ''}" src="${esc(p.portrait)}" alt="" width="${sz}" height="${sz}" loading="lazy" data-fb="${fb}" data-fbk="face" onerror="FC.u.imgFail(this)">`;
   }
+  /** " · 56 caps, 26 goals" for a senior international (Transfermarkt, to 30 Jun 2026). */
+  function caps(p) {
+    const n = p && p.intl;
+    if (!n || !n.caps) return '';
+    const t = `${n.caps} ${n.caps === 1 ? 'cap' : 'caps'}, ${n.goals} ${n.goals === 1 ? 'goal' : 'goals'}`;
+    return ` <span class="pp-caps" title="${esc(n.team)} senior caps to 30 June 2026">· ${t}</span>`;
+  }
   function flag(p) {
     if (!p || !p.natFlag) return '<span class="flag flag-ph" aria-hidden="true"></span>';
     return `<img class="flag" src="${esc(p.natFlag)}" alt="${esc(p.nat)}" title="${esc(p.nat)}" width="21" height="14" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'flag flag-ph'}))">`;
@@ -190,6 +197,6 @@
   FC.u = {
     hasClub, loadClub, clubColor, shortName, shortenName, esc, money, wageYr, wageYrTag, height, weight, contract, num, date, time12, parseDate, daysBetween, MONTHS, MONTHS_LONG, DAYS,
     league, leagueRows, team, teamName, comp, player, personName, us, isUs, opponent, result, played, upcoming,
-    initials, crest, portrait, flag, imgFail, compChip, resChip, resPill, goalsFor, apps, ghostCard, ratingClass, sum, posGroup,
+    initials, crest, portrait, flag, caps, imgFail, compChip, resChip, resPill, goalsFor, apps, ghostCard, ratingClass, sum, posGroup,
   };
 })();

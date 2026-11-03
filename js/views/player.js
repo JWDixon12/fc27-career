@@ -45,7 +45,7 @@
           ${U.portrait(p, 200, 'pp-face')}
           <div class="pp-id"><p class="pp-pos"><span class="pos-tag pg-${U.posGroup(p.pos)}">${p.pos}</span> ${p.altPos.map((x) => `<span class="pos-tag">${x}</span>`).join(' ')}</p>
             <h2>${U.esc(p.name)}</h2>
-            <p class="pp-sub">${U.flag(p)}<span>${U.esc(p.nat)} · ${p.age} years old${p.shirt ? ` · #${p.shirt}` : ''}${p.captain ? ' · <b class="gold">Captain</b>' : ''}${p.homegrown ? ' · Academy graduate' : ''}</span></p>
+            <p class="pp-sub">${U.flag(p)}<span>${U.esc(p.nat)}${U.caps(p)} · ${p.age} years old${p.shirt ? ` · #${p.shirt}` : ''}${p.captain ? ' · <b class="gold">Captain</b>' : ''}${p.homegrown ? ' · Academy graduate' : ''}</span></p>
             ${status}${scouted}</div>
           <div class="pp-ovr"><b>${p.ovr}</b><small>Overall</small>${delta ? `<span class="${delta > 0 ? 'up' : 'down'}">${delta > 0 ? '▲' : '▼'} ${Math.abs(delta)} since ${U.date(hist[0].date, 'short')}</span>` : ''}</div>
         </header>
