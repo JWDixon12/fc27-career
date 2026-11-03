@@ -1,1 +1,0 @@
-(window.CLUBS = window.CLUBS || {})[67] = {"id":67,"name":"FC Martigues","ratings":{"ovr":0,"att":0,"mid":0,"def":0},"capacity":0,"clubWorth":0,"prestige":{"domestic":5,"international":5},"honours":{"league":0,"domesticCups":0,"europeanCups":0},"rival":1318,"crest":"img/crests/67.png","squad":[],"fixtures":[]};
