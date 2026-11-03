@@ -52,9 +52,9 @@
 
   function bio(p) {
     const items = [
-      ['Age', p.age], ['Height', p.height ? `${p.height} cm` : null], ['Weight', p.weight ? `${p.weight} kg` : null],
+      ['Age', p.age], ['Height', FC.u.height(p.height)], ['Weight', FC.u.weight(p.weight)],
       ['Foot', p.foot], ['Weak foot', outOf5(p.weakFoot)], ['Skill moves', outOf5(p.skillMoves)], ['Int. reputation', outOf5(p.intlRep)],
-      ['Nation', p.nat], ['Wage', p.wage ? `${FC.u.money(p.wage)}/wk` : null], ['Contract', p.contractEnd ? `to ${p.contractEnd}` : null],
+      ['Nation', p.nat], ['Wage', FC.u.wageYrTag(p.wage)], ['Contract', FC.u.contract(p.contractEnd, true)],
     ].filter(([, v]) => v != null && v !== '');
     return `<dl class="at-bio">${items.map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>`;
   }

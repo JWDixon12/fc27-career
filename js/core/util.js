@@ -20,6 +20,19 @@
     else s = String(a);
     return sign + cur() + s;
   }
+  /** Wages are stored per week (game units); Justin reads them per year. */
+  const WEEKS = 52;
+  const wageYr = (w) => (w == null ? '—' : money(w * WEEKS));
+  const wageYrTag = (w) => (w == null ? null : `${money(w * WEEKS)}/yr`);
+  /** 189 -> 6'2" ; 77 -> 170 lbs. */
+  function height(cm) {
+    if (!cm) return null;
+    const inches = Math.floor(cm / 2.54 + 1e-9); // EA truncates, e.g. 189 cm -> 6'2"
+    return `${Math.floor(inches / 12)}'${inches % 12}"`;
+  }
+  const weight = (kg) => (kg ? `${Math.floor(kg * 2.20462)} lbs` : null); // EA truncates: 77 kg -> 169 lbs
+  /** FC contracts run to the end of June: 2030 -> 'thru Jun 2030' (long) / 'thru 2030' (short). */
+  const contract = (y, long) => (y ? `thru ${long ? 'Jun ' : ''}${y}` : null);
   const num = (n, dp) => (n == null || Number.isNaN(n) ? '—' : Number(n).toLocaleString('en-GB', { minimumFractionDigits: dp || 0, maximumFractionDigits: dp || 0 }));
 
   const parseDate = (s) => new Date(s + 'T12:00:00');
@@ -175,7 +188,7 @@
     pos === 'GK' ? 'GK' : /B$|CB|WB/.test(pos) ? 'DEF' : /DM|CM|AM|^[LR]M$/.test(pos) ? 'MID' : 'ATT';
 
   FC.u = {
-    hasClub, loadClub, clubColor, shortName, shortenName, esc, money, num, date, time12, parseDate, daysBetween, MONTHS, MONTHS_LONG, DAYS,
+    hasClub, loadClub, clubColor, shortName, shortenName, esc, money, wageYr, wageYrTag, height, weight, contract, num, date, time12, parseDate, daysBetween, MONTHS, MONTHS_LONG, DAYS,
     league, leagueRows, team, teamName, comp, player, personName, us, isUs, opponent, result, played, upcoming,
     initials, crest, portrait, flag, imgFail, compChip, resChip, resPill, goalsFor, apps, ghostCard, ratingClass, sum, posGroup,
   };

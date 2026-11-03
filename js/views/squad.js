@@ -7,7 +7,7 @@
 
   const COLS = [
     ['shirt', '#', true], ['name', 'Player', false], ['pos', 'Pos', false], ['age', 'Age', true], ['ovr', 'OVR', true],
-    ['value', 'Value', true], ['wage', 'Wage/wk', true], ['contractEnd', 'Contract', true], ['apps', 'Apps', true],
+    ['value', 'Value', true], ['wage', 'Wage/yr', true], ['contractEnd', 'Contract', true], ['apps', 'Apps', true],
     ['goals', 'G', true], ['assists', 'A', true], ['avgRating', 'Avg', true],
   ];
   const get = (p, k) => (['apps', 'goals', 'assists', 'avgRating'].includes(k) ? (p.season ? p.season[k] : null) : p[k]);
@@ -44,7 +44,7 @@
         <td><span class="who">${U.portrait(p, 36)}<span class="nm">${U.flag(p)}<b>${U.esc(p.name)}</b>${p.captain ? '<span class="cap" title="Captain">C</span>' : ''}${statusBadge(p)}</span></span></td>
         <td><span class="pos-tag pg-${U.posGroup(p.pos)}">${p.pos}</span> <small class="alt">${p.altPos.join(' ')}</small></td>
         <td class="n">${p.age}</td><td class="n"><b class="ovr">${p.ovr}</b></td><td class="n">${U.money(p.value)}</td>
-        <td class="n">${U.money(p.wage)}</td><td class="n">${p.contractEnd}</td><td class="n">${s.apps || 0}</td>
+        <td class="n">${U.wageYr(p.wage)}</td><td class="n">${p.contractEnd}</td><td class="n">${s.apps || 0}</td>
         <td class="n">${s.goals || 0}</td><td class="n">${s.assists || 0}</td>
         <td class="n">${s.avgRating ? `<span class="rating ${U.ratingClass(s.avgRating)}">${s.avgRating.toFixed(2)}</span>` : '—'}</td></tr>`;
     }).join('');
@@ -57,7 +57,7 @@
     const tier = (o) => (o >= 85 ? 'ov-elite' : o >= 80 ? 'ov-high' : o >= 75 ? 'ov-mid' : 'ov-low');
     return `<ol class="sq-list">${list.map((p) => `<li><button type="button" class="sq-row" data-player="${p.id}">
       ${U.portrait(p, 48)}<span class="sq-main"><b><span class="sq-pos pg-${U.posGroup(p.pos)}">${U.esc(p.pos)}</span>${U.esc(p.name)}${p.captain ? '<span class="cap" title="Captain">C</span>' : ''}</b>
-      <small>${[p.age, p.nat, p.wage ? `${U.money(p.wage)}/w` : null, `exp ${p.contractEnd}`].filter((x) => x != null).map(U.esc).join(' · ')}</small>${statusBadge(p)}</span>
+      <small>${[p.age, p.nat, U.wageYrTag(p.wage), U.contract(p.contractEnd)].filter((x) => x != null).map(U.esc).join(' · ')}</small>${statusBadge(p)}</span>
       <span class="sq-ovr ${tier(p.ovr)}">${p.ovr}</span></button></li>`).join('')}</ol>`;
   }
 
@@ -146,7 +146,7 @@
       const groups = [['ALL', 'All'], ['GK', 'GK'], ['DEF', 'DEF'], ['MID', 'MID'], ['ATT', 'ATT'], ['LOAN', 'Loans']];
       return `<header class="page-head"><div><h1>Squad</h1><p>${active.length} senior players · average age ${avgAge.toFixed(1)} · ${D().squad.length - active.length} out on loan</p></div>
         <dl class="tiles head-tiles"><div class="tile"><dt>Squad value</dt><dd>${U.money(U.sum(active, (p) => p.value))}</dd></div>
-          <div class="tile"><dt>Weekly wages</dt><dd>${U.money(D().club.weeklyWageBill)}</dd></div>
+          <div class="tile"><dt>Wage bill / yr</dt><dd>${U.wageYr(D().club.weeklyWageBill)}</dd></div>
           <div class="tile"><dt>Average OVR</dt><dd>${(U.sum(active, (p) => p.ovr) / active.length).toFixed(1)}</dd></div></dl></header>
         <section class="panel"><div class="panel-head squad-tools">
           <input class="field" type="search" id="sq-q" placeholder="Search name, nation or position" value="${U.esc(state.q)}" aria-label="Search squad">

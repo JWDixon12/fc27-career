@@ -52,8 +52,8 @@
         <div class="pp-grid">${FC.attrs ? FC.attrs.block(p, D().squad, 'Squad') : ''}${FC.history ? `<div class="hy-slot">${FC.history.block(p)}</div>` : ''}
           <section class="panel"><div class="panel-head"><h3>Contract</h3></div>
             <dl class="tiles"><div class="tile"><dt>Value</dt><dd>${U.money(p.value)}</dd></div>
-              <div class="tile"><dt>Wage / week</dt><dd>${U.money(p.wage)}</dd></div>
-              <div class="tile"><dt>Expires</dt><dd>${p.contractEnd}</dd><small>${seasonsLeft <= 1 ? 'Final season' : `${seasonsLeft} seasons left`}</small></div>
+              <div class="tile"><dt>Wage / year</dt><dd>${U.wageYr(p.wage)}</dd></div>
+              <div class="tile"><dt>Contract</dt><dd>${U.contract(p.contractEnd)}</dd><small>${seasonsLeft <= 1 ? 'Final season' : `${seasonsLeft} seasons left`}</small></div>
               <div class="tile"><dt>Release</dt><dd>${p.releaseClause ? U.money(p.releaseClause) : 'No clause'}</dd></div></dl></section>
           ${hist.length > 1 ? `<section class="panel"><div class="panel-head"><h3>Overall history</h3><p class="sub">${hist.map((h) => `${U.date(h.date, 'short')}: ${h.ovr}`).join(' · ')}</p></div>
             <div class="chart" id="pp-ovr"></div></section>` : ''}

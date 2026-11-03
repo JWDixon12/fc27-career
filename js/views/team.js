@@ -76,7 +76,7 @@
     return `<section class="sec"><div class="sec-head"><h2>Squad</h2><span class="sub">${c.squad.length} players</span></div>
       ${LINES.filter(([k]) => by[k]).map(([k, l]) => `<h3 class="tm-line">${l}</h3><ol class="sq-list tm-squad">${by[k].sort((a, b) => b.ovr - a.ovr).map((p) => `<li>
         <button type="button" class="sq-row" data-player="${p.id}"${ours ? '' : ` data-club="${c.id}"`}>${U.portrait({ ...p, short: p.name }, 40)}
-        <span class="sq-main"><b><span class="sq-pos">${esc(p.pos)}</span>${esc(p.name)}</b><small>${[p.age, p.shirt ? `#${p.shirt}` : null, p.wage ? `${U.money(p.wage)}/w` : null, p.contractEnd ? `to ${p.contractEnd}` : null].filter(Boolean).map(esc).join(' · ')}</small></span>
+        <span class="sq-main"><b><span class="sq-pos">${esc(p.pos)}</span>${esc(p.name)}</b><small>${[p.age, p.shirt ? `#${p.shirt}` : null, U.wageYrTag(p.wage), U.contract(p.contractEnd)].filter(Boolean).map(esc).join(' · ')}</small></span>
         <span class="sq-ovr">${p.ovr}</span></button></li>`).join('')}</ol>`).join('')}</section>`;
   }
 
