@@ -81,7 +81,7 @@
     const sel = lines.find((p) => p.id === perfPlayer);
     return `<div class="panel-head"><h2>Player performance</h2>
         <div class="seg" role="group" aria-label="Team">${[f.home, f.away].map((t) => `<button type="button" data-perf-team="${t}" aria-pressed="${t === perfTeam}">${u.esc(u.team(t).name)}</button>`).join('')}</div></div>
-      <div class="perf"><div class="table-wrap"><table class="data perf-table"><thead><tr><th>Pos</th><th>Player</th><th class="n">Rating</th><th class="n">Min</th><th class="n">G</th><th class="n">A</th><th class="n">Shots</th><th class="n">Passes</th><th class="n">Pass %</th><th class="n">Key</th><th class="n">Drib</th><th class="n">Tkl</th><th class="n">Int</th><th class="n">km</th></tr></thead><tbody>${rows}</tbody></table></div>
+      <div class="perf"><div class="table-wrap"><table class="data perf-table"><thead><tr><th>Pos</th><th>Player</th><th class="n">Rating</th><th class="n">Min</th><th class="n">G</th><th class="n">A</th><th class="n">Shots</th><th class="n">Passes</th><th class="n">Pass %</th><th class="n">Key</th><th class="n">Drib</th><th class="n">Tkl</th><th class="n">Int</th><th class="n">mi</th></tr></thead><tbody>${rows}</tbody></table></div>
       ${sel ? detail(f, m, sel) : ''}</div>`;
   }
 
@@ -93,7 +93,7 @@
     const tot = (k) => team.reduce((s, x) => s + (x[k] || 0), 0);
     const stats = [['Goals', p.goals, tot('goals')], ['Assists', p.assists, tot('assists')], ['Shots', p.shots, tot('shots')], ['Shot accuracy', `${p.shotAcc}%`, ''],
       ['Passes', p.passes, tot('passes')], ['Pass accuracy', `${p.passAcc}%`, ''], ['Dribbles', p.dribbles, tot('dribbles')], ['Tackles', p.tackles, tot('tackles')],
-      ['Possession won', p.possWon, tot('possWon')], ['Possession lost', p.possLost, tot('possLost')], ['Distance (km)', p.distanceKm, ''], ['Sprint (km)', p.sprintKm, ''],
+      ['Possession won', p.possWon, tot('possWon')], ['Possession lost', p.possLost, tot('possLost')], ['Distance (mi)', p.distanceKm, ''], ['Sprint (mi)', p.sprintKm, ''],
       ...(p.pos === 'GK' ? [['Saves', p.saves, '']] : [])];
     return `<aside class="perf-detail" aria-live="polite">
       <header>${sq ? u.portrait(sq, 64) : `<span class="face-fb" style="--s:64px">${u.esc(u.initials(p.name || '?'))}</span>`}

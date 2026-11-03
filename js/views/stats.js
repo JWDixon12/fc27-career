@@ -16,7 +16,7 @@
     passing: [['passes', 'Passes'], ['passAcc', 'Pass accuracy', 1, 'avg', '%'], ['keyPasses', 'Key passes'], ['lineBreaks', 'Line breaks'], ['xa', 'Expected assists', 2]],
     defending: [['tackles', 'Tackles'], ['interceptions', 'Interceptions'], ['possWon', 'Possession won'], ['duelsWon', 'Duels won']],
     goalkeeping: [['saves', 'Saves', 0, 'count', '', 'GK'], ['cleanSheets', 'Clean sheets', 0, 'raw', '', 'GK'], ['rating', 'Average rating', 2, 'avg', '', 'GK']],
-    physical: [['distanceKm', 'Distance covered', 1, 'count', ' km'], ['sprintKm', 'Sprint distance', 1, 'count', ' km'], ['mins', 'Minutes', 0, 'raw']],
+    physical: [['distanceKm', 'Distance covered', 1, 'count', ' mi'], ['sprintKm', 'Sprint distance', 1, 'count', ' mi'], ['mins', 'Minutes', 0, 'raw']],
     discipline: [['yellows', 'Yellow cards', 0, 'raw'], ['reds', 'Red cards', 0, 'raw'], ['fouls', 'Fouls'], ['possLost', 'Possession lost']],
   };
 
@@ -70,7 +70,7 @@
   function squadTable(rows) {
     const U = FC.u;
     const cols = [['pos', 'Pos', null], ['apps', 'MP', 0], ['mins', 'Min', 0], ['goals', 'G', 0], ['assists', 'A', 0], ['rating', 'Rtg', 2], ['shots', 'Sh', 0],
-      ['keyPasses', 'KP', 0], ['tackles', 'Tkl', 0], ['interceptions', 'Int', 0], ['distanceKm', 'km', 1], ['yellows', 'Y', 0], ['reds', 'R', 0]];
+      ['keyPasses', 'KP', 0], ['tackles', 'Tkl', 0], ['interceptions', 'Int', 0], ['distanceKm', 'mi', 1], ['yellows', 'Y', 0], ['reds', 'R', 0]];
     const list = rows.map((r) => ({ ...r, pos: (U.player(r.id) || {}).pos || '' }));
     list.sort((a, b) => {
       const x = a[st.sort], y = b[st.sort];

@@ -55,7 +55,7 @@
   const DEEP = [
     ['keyPasses', 'Key passes', 2], ['xa', 'Expected assists', 2], ['lineBreaks', 'Line breaks completed', 2],
     ['duelsWon', 'Duels won', 2], ['dribbles', 'Dribbles', 2], ['tackles', 'Tackles', 2], ['interceptions', 'Interceptions', 2],
-    ['possWon', 'Possession won', 2], ['possLost', 'Possession lost', 2], ['distanceKm', 'Distance (km)', 1], ['sprintKm', 'Sprint distance (km)', 1],
+    ['possWon', 'Possession won', 2], ['possLost', 'Possession lost', 2], ['distanceKm', 'Distance (mi)', 1], ['sprintKm', 'Sprint distance (mi)', 1],
   ];
 
   function per90(p) {
