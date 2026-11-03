@@ -10,7 +10,8 @@
   function captured(opts) {
     const list = D().fixtures.filter((f) => f.played && D().matches[f.id]).map((f) => ({ f, m: D().matches[f.id] }));
     if (!(opts && opts.extras)) return list;
-    const extra = Object.entries(D().matches).filter(([, m]) => m.fixture).map(([id, m]) => ({ f: { ...m.fixture, id, played: true }, m }));
+    const have = new Set(list.map((x) => x.f.id));
+    const extra = Object.entries(D().matches).filter(([id, m]) => m.fixture && !have.has(id)).map(([id, m]) => ({ f: { ...m.fixture, id, played: true }, m }));
     return [...list, ...extra].sort((a, b) => a.f.date.localeCompare(b.f.date));
   }
 
