@@ -251,3 +251,57 @@
   .ex-axis i:not(:first-child):not(:last-child) { display: none; }
   .ex-row.soon .ex-name::after { content: ' ●'; color: var(--warn); font-size: 0.7em; }
 }
+
+/* ---------- Youth Academy (rebuilt 2026-11-02: flags, scout strip, grouped prospects) ---------- */
+.yo-head h1 { margin-bottom: 6px; }
+.yo-stats { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; }
+.yo-stats span { padding: 6px 12px; border: 1px solid var(--rule-2); border-radius: 999px; color: var(--ash); font-size: var(--step--1); background: var(--tier); }
+.yo-stats b { color: var(--chalk); font-family: 'Big Shoulders Display', sans-serif; font-size: 1.15rem; margin-right: 3px; }
+.yo-sec { margin-top: 22px; }
+.yo-h { font-size: var(--step-1); margin: 0 0 12px; }
+.yo-scouts { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(230px, 78%); gap: 12px; overflow-x: auto;
+  scroll-snap-type: x mandatory; padding-bottom: 6px; scrollbar-width: none; }
+.yo-scouts::-webkit-scrollbar { display: none; }
+.yo-scout { position: relative; overflow: hidden; scroll-snap-align: start; padding: 16px 16px 14px; border-radius: 14px;
+  background: linear-gradient(160deg, var(--tier-2), var(--stand) 70%); border: 1px solid var(--rule); isolation: isolate; }
+.yo-scout.best { border-color: rgba(212, 175, 55, 0.55); box-shadow: inset 0 0 0 1px rgba(212, 175, 55, 0.15); }
+.yo-scout-bg { position: absolute; right: -18px; top: -10px; width: 150px; height: auto; opacity: 0.16; transform: rotate(-8deg);
+  border-radius: 6px; z-index: -1; filter: saturate(1.2); }
+.yo-kicker { margin: 0; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.7rem; color: var(--mute); }
+.yo-scout.best .yo-kicker { color: var(--gold); }
+.yo-country { margin: 2px 0 6px; font-family: 'Big Shoulders Display', sans-serif; font-weight: 800; font-size: 2rem; line-height: 1; text-transform: uppercase; }
+.yo-scout-name { display: flex; align-items: center; gap: 6px; margin: 0 0 12px; color: var(--ash); font-weight: 600; }
+.yo-meters { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0; }
+.yo-meters dt { color: var(--mute); font-size: 0.72rem; margin-bottom: 4px; }
+.yo-meters dd { margin: 0; }
+.yo-pips { display: inline-flex; gap: 4px; }
+.yo-pips i { width: 14px; height: 6px; border-radius: 3px; background: var(--rule-2); }
+.yo-pips i.on { background: var(--chalk); }
+.yo-scout.best .yo-pips i.on { background: var(--gold); }
+.yo-return { margin: 12px 0 0; font-size: 0.78rem; color: var(--mute); }
+.yo-return b { color: var(--ash); font-weight: 600; }
+.yo-flag { width: 22px; height: 15px; object-fit: cover; border-radius: 2px; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08); flex-shrink: 0; }
+.yo-flag.sm { width: 18px; height: 12px; margin-right: 6px; vertical-align: -1px; }
+.yo-grid { display: grid; gap: 16px; }
+.yo-group { display: flex; align-items: center; gap: 8px; margin: 18px 0 4px; font-size: 0.72rem; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--mute); }
+.yo-group span { color: var(--ash); background: var(--tier-2); border-radius: 999px; padding: 1px 7px; font-size: 0.68rem; }
+.yo-group:first-of-type { margin-top: 6px; }
+.yo-list, .yo-gradlist { list-style: none; margin: 0; padding: 0; }
+.yo-row, .yo-gradlist li { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto 46px; align-items: center; gap: 12px;
+  padding: 10px 0; border-top: 1px solid var(--rule); }
+.yo-list .yo-row:first-child { border-top: 0; }
+.yo-ovr { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 10px; background: var(--tier-2);
+  font-family: 'Big Shoulders Display', sans-serif; font-weight: 800; font-size: 1.35rem; }
+.yo-who { min-width: 0; }
+.yo-who b { display: block; font-size: 0.98rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.yo-who small { display: flex; align-items: center; color: var(--mute); font-size: 0.78rem; margin-top: 2px; }
+.yo-age { text-align: right; font-family: 'Big Shoulders Display', sans-serif; font-weight: 700; font-size: 1.3rem; }
+.yo-age small { font-family: inherit; font-size: 0.65rem; color: var(--mute); margin-left: 2px; }
+.yo-gradlist li { grid-template-columns: 52px minmax(0, 1fr) 44px; cursor: pointer; border-top: 0; padding: 8px 0; }
+.yo-gradlist li:hover { background: rgba(236, 231, 223, 0.03); }
+.yo-note { margin: 14px 0 0; color: var(--mute); font-size: 0.78rem; }
+@media (min-width: 900px) {
+  .yo-scouts { grid-auto-flow: row; grid-template-columns: repeat(3, minmax(0, 1fr)); overflow: visible; }
+  .yo-grid { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); align-items: start; }
+}

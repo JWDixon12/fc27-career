@@ -72,7 +72,7 @@
     const g = top((p) => p.season.goals + p.season.assists / 100);
     const a = top((p) => p.season.assists + p.season.goals / 100);
     const r = top((p) => (p.season.apps >= 2 ? p.season.avgRating : 0));
-    const item = (p, label, v) => `<li><button type="button" class="tp" data-player="${p.id}"><span class="tp-l">${label}</span><b>${esc(p.short)}</b><span class="tp-v">${v}</span></button></li>`;
+    const item = (p, label, v) => `<li><button type="button" class="tp" data-player="${p.id}"><span class="tp-l">${label}</span><b>${esc(p.name)}</b><span class="tp-v">${v}</span></button></li>`;
     return `<section class="sec"><div class="sec-head"><h2>Top performers</h2><a class="sub" href="#stats">Stats</a></div>
       <ol class="tp-line">${item(g, 'Goals', g.season.goals)}${item(a, 'Assists', a.season.assists)}${r.season.avgRating ? item(r, 'Avg rating', r.season.avgRating.toFixed(2)) : ''}</ol></section>`;
   }

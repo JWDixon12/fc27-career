@@ -40,7 +40,7 @@
       <ol class="lb-list">${(open ? list : list.slice(0, 5)).map(({ r, v }, i) => {
         const p = U.player(r.id) || { name: '?', short: '?' };
         return `<li><button type="button" class="lb-row ${i === 0 ? 'lead' : ''}" data-player="${r.id}">
-          <span class="lb-rank">${i + 1}</span>${U.portrait(p, 40)}<span class="lb-name"><b>${esc(p.short)}</b><i class="lb-bar"><i style="width:${(100 * v) / max}%"></i></i></span>
+          <span class="lb-rank">${i + 1}</span>${U.portrait(p, 40)}<span class="lb-name"><b>${esc(p.name)}</b><i class="lb-bar"><i style="width:${(100 * v) / max}%"></i></i></span>
           <span class="lb-val">${fmt(v)}</span></button></li>`;
       }).join('')}</ol>${list.length > 5 ? `<button type="button" class="lb-more" data-lbmore="${esc(id)}">${open ? 'Show top 5' : `See all ${list.length}`}</button>` : ''}</section>`;
   }

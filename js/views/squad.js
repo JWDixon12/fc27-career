@@ -56,7 +56,7 @@
     const U = FC.u;
     const tier = (o) => (o >= 85 ? 'ov-elite' : o >= 80 ? 'ov-high' : o >= 75 ? 'ov-mid' : 'ov-low');
     return `<ol class="sq-list">${list.map((p) => `<li><button type="button" class="sq-row" data-player="${p.id}">
-      ${U.portrait(p, 48)}<span class="sq-main"><b><span class="sq-pos pg-${U.posGroup(p.pos)}">${U.esc(p.pos)}</span>${U.esc(p.short)}${p.captain ? '<span class="cap" title="Captain">C</span>' : ''}</b>
+      ${U.portrait(p, 48)}<span class="sq-main"><b><span class="sq-pos pg-${U.posGroup(p.pos)}">${U.esc(p.pos)}</span>${U.esc(p.name)}${p.captain ? '<span class="cap" title="Captain">C</span>' : ''}</b>
       <small>${[p.age, p.nat, p.wage ? `${U.money(p.wage)}/w` : null, `exp ${p.contractEnd}`].filter((x) => x != null).map(U.esc).join(' · ')}</small>${statusBadge(p)}</span>
       <span class="sq-ovr ${tier(p.ovr)}">${p.ovr}</span></button></li>`).join('')}</ol>`;
   }
@@ -67,7 +67,7 @@
       <span class="pc-num" aria-hidden="true">${p.shirt || ''}</span>
       <span class="pc-ovr"><b>${p.ovr}</b><small class="pg-${U.posGroup(p.pos)}">${p.pos}</small></span>
       ${U.portrait(p, 120, 'pc-face')}
-      <span class="pc-name">${U.esc(p.short)}</span>
+      <span class="pc-name">${U.esc(p.name)}</span>
       <span class="pc-meta">${U.flag(p)}<span>${p.age} yrs · ${U.money(p.value)}</span></span>
       ${p.season && p.season.apps ? `<span class="pc-season">${U.apps(p.season.apps)} · ${p.season.goals} G · ${p.season.assists} A</span>` : '<span class="pc-season">No apps yet</span>'}
       ${statusBadge(p)}</button>`).join('')}</div>`;

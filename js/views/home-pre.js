@@ -47,7 +47,7 @@
     if (!list.length) return '';
     return `<section class="sec"><div class="sec-head"><h2>Contracts ending ${y}</h2><span class="sub">${list.length} players</span></div>
       <table class="data"><thead><tr><th>Player</th><th>Pos</th><th class="n">Age</th><th class="n">Wage/wk</th><th class="n">Ends</th></tr></thead><tbody>
-      ${list.map((p) => `<tr data-player="${p.id}" tabindex="0"><td><b>${esc(p.short)}</b></td><td>${esc(p.pos)}</td><td class="n">${p.age}</td><td class="n">${FC.u.money(p.wage)}</td><td class="n">30 Jun ${p.contractEnd}</td></tr>`).join('')}
+      ${list.map((p) => `<tr data-player="${p.id}" tabindex="0"><td><b>${esc(p.name)}</b></td><td>${esc(p.pos)}</td><td class="n">${p.age}</td><td class="n">${FC.u.money(p.wage)}</td><td class="n">30 Jun ${p.contractEnd}</td></tr>`).join('')}
       </tbody></table></section>`;
   }
 

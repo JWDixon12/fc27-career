@@ -19,7 +19,7 @@
       ${players.map((p) => {
         const soon = p.contractEnd <= thisSeason;
         return `<div class="ex-row ${soon ? 'soon' : ''}" data-player="${p.id}" tabindex="0" data-tip="${U.esc(`<strong>${U.esc(p.name)}</strong>Contract to June ${p.contractEnd} · ${U.money(p.wage)}/wk · age ${p.age}`)}">
-          <span class="ex-name">${U.esc(p.short)}</span><span class="ex-flag">${soon ? '<span class="status-tag s-at_risk">Final year</span>' : ''}</span>
+          <span class="ex-name">${U.esc(p.name)}</span><span class="ex-flag">${soon ? '<span class="status-tag s-at_risk">Final year</span>' : ''}</span>
           <span class="ex-track">${years.map((y) => `<i class="ex-tick" style="left:${pct(end(y))}%"></i>`).join('')}<span class="ex-bar" style="width:${pct(end(p.contractEnd))}%"></span></span></div>`;
       }).join('')}</div>`;
   }
