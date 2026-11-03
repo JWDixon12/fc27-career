@@ -118,7 +118,7 @@
     if (!clubWaits[n]) {
       clubWaits[n] = new Promise((res) => {
         const sc = document.createElement('script');
-        sc.src = `data/clubs/${n}.js`;
+        sc.src = `data/clubs/${n}.js?v=${window.FC_BUILD || ''}`;
         sc.onload = () => res(window.CLUBS[n] || null);
         sc.onerror = () => { delete clubWaits[n]; res(null); };
         document.head.appendChild(sc);

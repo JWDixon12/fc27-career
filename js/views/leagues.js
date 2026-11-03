@@ -13,7 +13,7 @@
     if (!searchWait) {
       searchWait = new Promise((res) => {
         const sc = document.createElement('script');
-        sc.src = 'data/search.js';
+        sc.src = 'data/search.js?v=' + (window.FC_BUILD || '');
         sc.onload = () => res(window.SEARCH || []);
         sc.onerror = () => { searchWait = null; res([]); };
         document.head.appendChild(sc);
