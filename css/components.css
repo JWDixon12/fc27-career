@@ -156,7 +156,7 @@ table.data tr.us td:first-child { box-shadow: inset 3px 0 0 var(--home); }
   top: 0;
   right: 0;
   bottom: 0;
-  width: min(1100px, 100vw);
+  width: min(1200px, 100vw);
   overflow-y: auto;
   background: linear-gradient(180deg, #17191f, var(--night) 60%);
   border-left: 1px solid var(--rule-2);

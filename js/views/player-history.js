@@ -93,7 +93,7 @@
   function current(p) {
     const s = p.season;
     if (!s || !s.apps) return null;
-    return derive({ season: `${window.CAREER.meta.season.replace('/', '-20')} (this career)`, y: 9999, age: p.age, club: window.CAREER.meta.clubId, country: null,
+    return derive({ season: window.CAREER.meta.season.replace('/', '-'), y: 9999, age: p.age, club: window.CAREER.meta.clubId, country: null,
       comp: 'This career', type: 'all', mp: s.apps, starts: s.starts, min: s.mins, gls: s.goals, ast: s.assists, pk: null, crdy: s.yellows, crdr: s.reds,
       ga: null, cs: p.pos === 'GK' ? s.cleanSheets : null, saves: null, current: true });
   }

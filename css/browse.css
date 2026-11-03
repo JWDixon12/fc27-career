@@ -111,3 +111,10 @@
   .league-table .mvc { display: none; }
 }
 @media (max-width: 760px) { .league-table thead th:nth-child(2) { display: none; } }
+
+/* desktop: season labels never wrap into the squad column; table fits the sheet without sideways scroll */
+.hy-table .hy-s { white-space: nowrap; }
+@media (min-width: 761px) {
+  .hy-table th, .hy-table td { padding: 7px 6px; }
+  .hy-table .hy-s { padding-left: 10px; }
+}
