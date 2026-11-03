@@ -33,7 +33,7 @@
   function clubRecord() {
     const C = D().club;
     const h = C.honours;
-    const rows = [['Ground', `${C.stadium}${C.capacity ? ` · capacity ${FC.u.num(C.capacity)}` : ''}`]];
+    const rows = [...(C.nickname ? [['Nickname', C.nickname]] : []), ['Ground', `${C.stadium}${C.capacity ? ` · capacity ${FC.u.num(C.capacity)}` : ''}`]];
     if (C.clubWorth) rows.push(['Club worth', FC.u.money(C.clubWorth)]);
     return `<section class="sec club-rec"><div class="sec-head"><h2>Club</h2></div>
       <dl class="kv">${rows.map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>

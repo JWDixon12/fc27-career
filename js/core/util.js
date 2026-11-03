@@ -33,6 +33,13 @@
     if (style === 'day') return `${DAYS[d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()]}`;
     return `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
   }
+  /** "20:00" -> "8:00 PM". Empty or malformed input returns ''. */
+  function time12(t) {
+    const m = /^(\d{1,2}):(\d{2})/.exec(t || '');
+    if (!m) return '';
+    const h = Number(m[1]);
+    return `${h % 12 || 12}:${m[2]} ${h < 12 ? 'AM' : 'PM'}`;
+  }
   const daysBetween = (a, b) => Math.round((parseDate(b) - parseDate(a)) / 864e5);
 
   /* ---------- lookups ---------- */
@@ -67,6 +74,9 @@
     const ga = home ? f.ag : f.hg;
     return { res: gf > ga ? 'W' : gf === ga ? 'D' : 'L', gf, ga };
   }
+  /** Our domestic league competition and its table rows. */
+  const league = () => D().competitions.find((c) => c.type === 'league') || { id: 'PL', name: 'League' };
+  const leagueRows = () => (D().table && D().table[league().id]) || [];
   const played = () => D().fixtures.filter((f) => f.played);
   const upcoming = () => D().fixtures.filter((f) => !f.played);
 
@@ -76,12 +86,41 @@
     if (!parts.length) return '?';
     return (parts.length === 1 ? parts[0].slice(0, 2) : parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
   }
+  /** Primary club colours (deepened where the kit colour is too light for white text). */
+  const CLUB_COLORS = { 1: '#b8000a', 2: '#670e36', 5: '#034694', 7: '#003399', 8: '#1d428a', 9: '#b0102a', 10: '#1f5f94', 11: '#b51d12',
+    13: '#2a2627', 14: '#b80000', 18: '#132257', 21: '#c1052a', 32: '#b8000a', 31: '#b51d12', 52: '#7d1b2a', 94: '#0033a0', 106: '#c1121f',
+    144: '#2a2a2a', 237: '#00703f', 240: '#b52d20', 241: '#004d98', 243: '#2a2a3a', 305: '#a3001b', 483: '#8a6d00', 1745: '#0b3d91',
+    1799: '#1b458f', 1800: '#1d6fa3', 1808: '#0057b8', 1925: '#c00510', 1943: '#a50d12', 1952: '#a86400', 112172: '#c0063a',
+    22: '#a88400', 23: '#0f6b3a', 25: '#b8001a', 28: '#0a3f8f', 34: '#004d9d', 36: '#b8001a', 38: '#1a7f49', 169: '#b5121c', 580: '#2a2a2e',
+    1824: '#9e0010', 1831: '#b8001a', 10029: '#1961b5', 10030: '#003a80', 100409: '#a8302c', 66: '#1c3f94', 191: '#b50e2a', 211: '#0b4ea2',
+    219: '#1f7ea8', 327: '#2a2a2e', 700: '#7d6b00', 873: '#1a5aa8', 1873: '#b8001a' };
+  const clubColor = (id) => (Number(id) === us() && D().club.colors ? D().club.colors.primary : CLUB_COLORS[Number(id)] || '#3a3a40');
+  const hasClub = (id) => (D().clubIndex || []).includes(Number(id));
+  /** Load data/clubs/<id>.js once (script injection works on file:// and static hosting). */
+  const clubWaits = {};
+  function loadClub(id) {
+    const n = Number(id);
+    window.CLUBS = window.CLUBS || {};
+    if (window.CLUBS[n]) return Promise.resolve(window.CLUBS[n]);
+    if (!hasClub(n)) return Promise.resolve(null);
+    if (!clubWaits[n]) {
+      clubWaits[n] = new Promise((res) => {
+        const sc = document.createElement('script');
+        sc.src = `data/clubs/${n}.js`;
+        sc.onload = () => res(window.CLUBS[n] || null);
+        sc.onerror = () => { delete clubWaits[n]; res(null); };
+        document.head.appendChild(sc);
+      });
+    }
+    return clubWaits[n];
+  }
   function crest(id, size, extra) {
     const t = team(id);
+    const tap = hasClub(id) ? ` data-team="${Number(id)}"` : '';
     const sz = size || 32;
     const fb = esc(t.short || initials(t.name));
-    if (!t.crest) return `<span class="crest-fb" style="--s:${sz}px" aria-hidden="true">${fb}</span>`;
-    return `<img class="crest ${extra || ''}" src="${esc(t.crest)}" alt="${esc(t.name)} crest" width="${sz}" height="${sz}" loading="lazy" data-fb="${fb}" data-fbk="crest" onerror="FC.u.imgFail(this)">`;
+    if (!t.crest) return `<span class="crest-fb" style="--s:${sz}px" aria-hidden="true"${tap}>${fb}</span>`;
+    return `<img class="crest ${extra || ''}" src="${esc(t.crest)}" alt="${esc(t.name)} crest" width="${sz}" height="${sz}" loading="lazy" data-fb="${fb}" data-fbk="crest" onerror="FC.u.imgFail(this)"${tap}>`;
   }
   function portrait(p, size, extra) {
     const sz = size || 48;
@@ -100,6 +139,7 @@
     span.style.setProperty('--s', (img.getAttribute('width') || 32) + 'px');
     span.setAttribute('aria-hidden', 'true');
     span.textContent = img.dataset.fb || '?';
+    if (img.dataset.team) span.dataset.team = img.dataset.team;
     if (img.className) span.className += ' ' + img.className.replace(/\b(crest|face)\b/g, '').trim();
     img.replaceWith(span);
   }
@@ -123,8 +163,8 @@
     pos === 'GK' ? 'GK' : /B$|CB|WB/.test(pos) ? 'DEF' : /DM|CM|AM|^[LR]M$/.test(pos) ? 'MID' : 'ATT';
 
   FC.u = {
-    esc, money, num, date, parseDate, daysBetween, MONTHS, MONTHS_LONG, DAYS,
-    team, teamName, comp, player, personName, us, isUs, opponent, result, played, upcoming,
+    hasClub, loadClub, clubColor, esc, money, num, date, time12, parseDate, daysBetween, MONTHS, MONTHS_LONG, DAYS,
+    league, leagueRows, team, teamName, comp, player, personName, us, isUs, opponent, result, played, upcoming,
     initials, crest, portrait, flag, imgFail, compChip, resChip, resPill, goalsFor, apps, ghostCard, ratingClass, sum, posGroup,
   };
 })();

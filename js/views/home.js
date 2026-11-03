@@ -19,11 +19,11 @@
   function hero(f) {
     const U = FC.u;
     if (!f) return '<section class="hero"><p class="empty-note">No fixtures left this season.</p></section>';
-    const side = (id) => `<div class="hero-side">${U.crest(id, 72, 'hero-crest')}<span class="hero-name">${esc(U.team(id).name)}</span></div>`;
-    return `<section class="hero" aria-label="Next match">
+    const side = (id) => `<div class="hero-side">${U.crest(id, 96, 'hero-crest')}<span class="hero-name"${U.hasClub(id) ? ` data-team="${id}"` : ''}>${esc(U.team(id).name)}</span></div>`;
+    return `<section class="hero club-field" style="--club:${U.clubColor(D().meta.clubId)}" aria-label="Next match">
       <header class="hero-top"><span class="hero-label">Next match</span>${U.compChip(f.comp)}</header>
       <div class="hero-face">${side(f.home)}<span class="hero-vs">v</span>${side(f.away)}</div>
-      <p class="hero-when">${U.date(f.date, 'day')}, ${esc(f.time || '')} · ${f.venue === 'H' ? esc(D().club.stadium) : 'Away'}</p>
+      <p class="hero-when">${U.date(f.date, 'day')}, ${U.time12(f.time)} · ${f.venue === 'H' ? esc(D().club.stadium) : 'Away'}</p>
       ${countdown(f)}</section>`;
   }
 
@@ -34,7 +34,7 @@
     return `<section class="sec"><div class="sec-head"><h2>Coming up</h2><a class="sub" href="#calendar">All fixtures</a></div>
       <ol class="cu">${list.map((n) => {
         const o = U.opponent(n);
-        return `<li><a class="cu-row" href="#calendar" style="--c:${esc(U.comp(n.comp).color)}">
+        return `<li><a class="cu-row" href="#${U.hasClub(o) ? `team/${o}` : 'calendar'}" style="--c:${esc(U.comp(n.comp).color)}">
           <span class="cu-date">${U.date(n.date, 'short')}</span>${U.crest(o, 24)}<b>${esc(U.team(o).name)}</b><span class="cu-ha">${n.venue}</span></a></li>`;
       }).join('')}</ol></section>`;
   }
@@ -55,11 +55,11 @@
   /** Table rows around our position (two above, two below). */
   function tableAround() {
     const U = FC.u;
-    const rows = (D().table && D().table.PL) || [];
+    const rows = U.leagueRows();
     if (!rows.length || !rows[0].p) return '';
     const i = rows.findIndex((r) => U.isUs(r.team));
     const from = Math.max(0, Math.min(rows.length - 5, i - 2));
-    return `<section class="sec"><div class="sec-head"><h2>Premier League</h2><a class="sub" href="#league">Full table</a></div>
+    return `<section class="sec"><div class="sec-head"><h2>${esc(U.league().name)}</h2><a class="sub" href="#league">Full table</a></div>
       <table class="data mini-table"><thead><tr><th class="n">#</th><th>Club</th><th class="n">P</th><th class="n">GD</th><th class="n">Pts</th></tr></thead><tbody>
       ${rows.slice(from, from + 5).map((r, k) => `<tr class="${U.isUs(r.team) ? 'us' : ''}"><td class="n">${from + k + 1}</td><td><span class="who">${U.crest(r.team, 18)}${esc(U.team(r.team).name)}</span></td>
         <td class="n">${r.p}</td><td class="n">${r.gf - r.ga > 0 ? '+' : ''}${r.gf - r.ga}</td><td class="n"><b>${r.pts}</b></td></tr>`).join('')}</tbody></table></section>`;

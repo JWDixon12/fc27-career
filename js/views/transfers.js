@@ -7,7 +7,7 @@
   const clubCell = (c) => {
     const U = FC.u;
     const known = typeof c === 'number' || /^\d+$/.test(String(c));
-    return `<span class="club">${known ? U.crest(c, 22) : `<span class="crest-fb" style="--s:22px" aria-hidden="true">${U.esc(U.initials(c))}</span>`}${U.esc(U.teamName(c))}</span>`;
+    return `<span class="club"${known && U.hasClub(c) ? ` data-team="${c}"` : ''}>${known ? U.crest(c, 22) : `<span class="crest-fb" style="--s:22px" aria-hidden="true">${U.esc(U.initials(c))}</span>`}${U.esc(U.teamName(c))}</span>`;
   };
 
   function deal(t) {

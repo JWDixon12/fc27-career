@@ -4,13 +4,18 @@
   const FC = (window.FC = window.FC || {});
   const D = () => window.CAREER;
 
+  /** comp.zones: { cl, el, playoff, rel } counts from the top / bottom of the table. */
+  const zonesOf = (comp) => ({ cl: 4, el: 1, playoff: 0, rel: 3, ...(comp.zones || {}) });
   function zone(i, n, comp) {
     if (comp.type !== 'league') return '';
-    if (i < 4) return 'z-ucl';
-    if (i === 4) return 'z-uel';
-    if (i >= n - 3) return 'z-rel';
+    const z = zonesOf(comp);
+    if (i < z.cl) return 'z-ucl';
+    if (i < z.cl + z.el) return 'z-uel';
+    if (i >= n - z.rel) return 'z-rel';
+    if (z.playoff && i >= n - z.rel - z.playoff) return 'z-po';
     return '';
   }
+
 
   function table(compId, rows, opts) {
     const U = FC.u;
@@ -21,7 +26,7 @@
       const now = i + 1;
       const mv = prev == null ? '' : prev > now ? `<span class="mv up" title="Up from ${prev}">▲${prev - now}</span>` : prev < now ? `<span class="mv down" title="Down from ${prev}">▼${now - prev}</span>` : '<span class="mv same" title="No change">–</span>';
       const gd = r.gf - r.ga;
-      return `<tr class="${U.isUs(r.team) ? 'us' : ''} ${zone(i, rows.length, c)}">
+      return `<tr class="${U.isUs(r.team) ? 'us' : ''} ${zone(i, rows.length, c)}"${U.hasClub(r.team) ? ` data-href="team/${r.team}" tabindex="0"` : ''}>
         <td class="n pos">${now}</td><td class="mvc">${mv}</td>
         <td><span class="who">${U.crest(r.team, 26)}<b>${U.esc(U.team(r.team).name)}</b></span></td>
         <td class="n">${r.p}</td><td class="n">${r.w}</td><td class="n">${r.d}</td><td class="n">${r.l}</td>
@@ -47,6 +52,13 @@
       }).join('')}</ol></section>`;
   }
 
+  function zoneText(comp) {
+    const z = zonesOf(comp || {});
+    const word = (n) => ['', 'one', 'two', 'three', 'four', 'five', 'six'][n] || String(n);
+    return `Top ${word(z.cl)} qualify for the Champions League, ${z.el === 1 ? 'the next' : `the next ${word(z.el)}`} for the Europa League.`
+      + `${z.playoff ? ` ${z.playoff === 1 ? 'One club plays' : `${word(z.playoff)} clubs play`} a relegation play-off;` : ''} the bottom ${word(z.rel)} go down.`;
+  }
+
   FC.views.league = {
     render() {
       const U = FC.u;
@@ -57,13 +69,13 @@
         <p class="sub">${c.type === 'europe' ? 'League phase. Only clubs tracked in this save are listed.' : ''}</p></div>${table(c.id, D().table[c.id], { compact: true })}</section>`).join('');
       const cups = others.filter((c) => c.type === 'cup' || (c.type === 'europe' && !D().table[c.id])).map((c) => cupPath(c.id)).join('');
       const md = rows.length ? rows[0].posHistory.length : 0;
-      return `<header class="page-head"><div><h1>${U.esc(league ? league.name : 'League')}</h1><p>${md ? `After matchday ${md}.` : 'Season not started.'} Top four qualify for the Champions League, fifth for the Europa League, bottom three go down.</p></div></header>
+      return `<header class="page-head"><div><h1>${U.esc(league ? league.name : 'League')}</h1><p>${md ? `After matchday ${md}.` : 'Season not started.'} ${zoneText(league)}</p></div></header>
         ${md ? '' : `<div class="g12">
           <section class="panel" style="--span:7;--xl:6">${table(league.id, rows)}</section>
           <div class="stack fill lg-pre-side" style="--span:5;--xl:6">${U.ghostCard('Position by matchday', 'Plotted from matchday 1.')}${otherTables}${cups}</div></div>`}
         <div class="g12 lg-grid" ${md ? '' : 'hidden'}>
           <div class="stack lg-main" style="--span:7"><section class="panel lg-table">${table(league.id, rows)}
-            <p class="legend zone-key"><span><i class="sw" style="--c:var(--c-europe)"></i>Champions League</span><span><i class="sw" style="--c:var(--away)"></i>Europa League</span><span><i class="sw" style="--c:var(--crit)"></i>Relegation</span></p></section>
+            <p class="legend zone-key"><span><i class="sw" style="--c:var(--c-europe)"></i>Champions League</span><span><i class="sw" style="--c:var(--away)"></i>Europa League</span>${zonesOf(league).playoff ? '<span><i class="sw" style="--c:var(--gold)"></i>Play-off</span>' : ''}<span><i class="sw" style="--c:var(--crit)"></i>Relegation</span></p></section>
             <div class="stack lg-cups">${cups}</div></div>
           <div class="stack ${md ? 'fill' : ''} lg-side" style="--span:5">
             <section class="panel grow lg-bump-p"><div class="panel-head"><h2>Position by matchday</h2><p class="sub"></p></div><div class="chart" id="lg-bump"></div></section>

@@ -38,16 +38,16 @@
       const gd = U.parseDate(D().meta.gameDate);
       const seasonsLeft = p.contractEnd - (gd.getMonth() >= 6 ? gd.getFullYear() + 1 : gd.getFullYear()) + 1;
       return `<article class="pp">
-        <header class="pp-head">
+        <header class="pp-head club-field" style="--club:${U.clubColor(D().meta.clubId)}">
           <span class="pp-num" aria-hidden="true">${p.shirt || ''}</span>
-          ${U.portrait(p, 168, 'pp-face')}
+          ${U.portrait(p, 200, 'pp-face')}
           <div class="pp-id"><p class="pp-pos"><span class="pos-tag pg-${U.posGroup(p.pos)}">${p.pos}</span> ${p.altPos.map((x) => `<span class="pos-tag">${x}</span>`).join(' ')}</p>
             <h2>${U.esc(p.name)}</h2>
             <p class="pp-sub">${U.flag(p)}<span>${U.esc(p.nat)} · ${p.age} years old${p.shirt ? ` · #${p.shirt}` : ''}${p.captain ? ' · <b class="gold">Captain</b>' : ''}${p.homegrown ? ' · Academy graduate' : ''}</span></p>
             ${status}</div>
           <div class="pp-ovr"><b>${p.ovr}</b><small>Overall</small>${delta ? `<span class="${delta > 0 ? 'up' : 'down'}">${delta > 0 ? '▲' : '▼'} ${Math.abs(delta)} since ${U.date(hist[0].date, 'short')}</span>` : ''}</div>
         </header>
-        <div class="pp-grid">
+        <div class="pp-grid">${FC.attrs ? FC.attrs.block(p, D().squad, 'Squad') : ''}
           <section class="panel"><div class="panel-head"><h3>Contract</h3></div>
             <dl class="tiles"><div class="tile"><dt>Value</dt><dd>${U.money(p.value)}</dd></div>
               <div class="tile"><dt>Wage / week</dt><dd>${U.money(p.wage)}</dd></div>

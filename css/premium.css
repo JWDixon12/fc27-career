@@ -196,3 +196,4 @@ table.data tbody tr:hover { background: rgba(242, 239, 233, 0.03); }
 .stories h3, .stories.big h3 { font: 700 18px/1.3 var(--f-text); margin: 0 0 4px; }
 .stories p { color: var(--ash); font-size: 15px; }
 .stories li { border-bottom: 1px solid var(--rule); padding: 12px 0; }
+.league-table tr.z-po td.pos { box-shadow: inset 3px 0 0 var(--gold); }

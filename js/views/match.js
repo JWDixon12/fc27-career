@@ -22,7 +22,7 @@
     const goals = (t) => m.events.filter((e) => /goal/.test(e.type) && e.team === t)
       .map((e) => `<li>${U.esc(U.personName(e.player))} ${e.minute}'${e.type === 'pen_goal' ? ' (pen)' : e.type === 'own_goal' ? ' (og)' : ''}</li>`).join('');
     const reds = (t) => m.events.filter((e) => e.type === 'red' && e.team === t).map((e) => `<li class="red-card">${U.esc(U.personName(e.player))} ${e.minute}'</li>`).join('');
-    const side = (t, i) => `<div class="sb-side sb-${i ? 'r' : 'l'}">${U.crest(t, 110, 'sb-crest')}<h2>${U.esc(U.team(t).name)}</h2>
+    const side = (t, i) => `<div class="sb-side sb-${i ? 'r' : 'l'}">${U.crest(t, 110, 'sb-crest')}<h2${U.hasClub(t) ? ` data-team="${t}"` : ''}>${U.esc(U.team(t).name)}</h2>
       <p class="sb-xg">${m.xg[i].toFixed(2)} xG · ${m.possession[i]}% possession</p><ul class="sb-goals">${goals(t)}${reds(t)}</ul></div>`;
     return `<section class="scoreboard" aria-label="Final score">
       <header>${U.compChip(f.comp)}<span>${U.esc(f.round)}</span><span>${U.date(f.date, 'day')} ${U.parseDate(f.date).getFullYear()}</span><span>${f.venue === 'H' ? U.esc(D().club.stadium) : 'Away'}</span></header>

@@ -21,7 +21,7 @@
   function scoreboard(f, m) {
     const U = FC.u;
     const goals = (s) => m.events.filter((e) => /goal/.test(e.type) && e.side === s).map((e) => `<li>${esc(e.player)} ${e.minute}'${e.assist ? ` <small>(${esc(e.assist)})</small>` : ''}</li>`).join('');
-    const side = (s, i) => `<div class="sb-side sb-${i ? 'r' : 'l'}">${U.crest(m.sides[s].teamId, 110, 'sb-crest')}<h2>${esc(sideName(m, s))}</h2>
+    const side = (s, i) => `<div class="sb-side sb-${i ? 'r' : 'l'}">${U.crest(m.sides[s].teamId, 110, 'sb-crest')}<h2${U.hasClub(m.sides[s].teamId) ? ` data-team="${m.sides[s].teamId}"` : ''}>${esc(sideName(m, s))}</h2>
       <p class="sb-xg">${m.xg[i].toFixed(2)} xG · ${m.possession[i]}% possession</p><ul class="sb-goals">${goals(s)}</ul></div>`;
     const paused = m.minutesPlayed && m.minutesPlayed < 90;
     return `<section class="scoreboard" aria-label="Score">

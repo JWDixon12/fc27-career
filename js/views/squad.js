@@ -110,11 +110,25 @@
         ${L.map((p, i) => `<button type="button" class="ds-p ${i === 0 ? 'first' : ''} ${p.status === 'injured' ? 'inj' : ''}" data-player="${p.id}">
           ${i === 0 ? U.portrait(p, 44) : ''}<span>${U.esc(p.short)}</span><b>${p.ovr}</b></button>`).join('') || '<span class="empty-note">Nobody</span>'}</div>`;
     }).join('');
+    // phone: a compact mini-pitch with shirt numbers, then the slots as a list grouped by line
+    const LINE = [['Attack', ['LM', 'CAM', 'RM', 'ST']], ['Midfield', ['LDM', 'RDM']], ['Defence', ['LB', 'LCB', 'RCB', 'RB']], ['Goalkeeper', ['GK']]];
+    const mini = SLOTS.map(([id, , , x, y]) => {
+      const p = (lists[id] || [])[0];
+      return p ? `<span class="dm-dot" style="left:${y}%;top:${100 - x}%">${p.shirt || ''}</span>` : '';
+    }).join('');
+    const list = LINE.map(([name, ids]) => `<h4 class="dl-line">${name}</h4><ol class="dl-list">${ids.map((id) => {
+      const slot = SLOTS.find((x) => x[0] === id);
+      const [first, ...rest] = lists[id] || [];
+      if (!first) return '';
+      return `<li><span class="dl-slot">${U.esc(slot[1])}</span>
+        <button type="button" class="dl-first ${first.status === 'injured' ? 'inj' : ''}" data-player="${first.id}">${U.portrait(first, 36)}<b>${U.esc(first.short)}</b><span class="sq-ovr">${first.ovr}</span></button>
+        ${rest.length ? `<span class="dl-cover">Cover: ${rest.map((p) => `<button type="button" class="link-btn" data-player="${p.id}">${U.esc(p.short)} ${p.ovr}</button>`).join(', ')}</span>` : ''}</li>`;
+    }).join('')}</ol>`).join('');
     return `<div class="depth"><div class="depth-pitch">
       ${FC.pitch.svg('', { orient: 'h', cls: 'dp-h', label: 'Depth chart pitch', dir: false })}
-      ${FC.pitch.svg('', { orient: 'v', cls: 'dp-v', label: 'Depth chart pitch', dir: false })}
       ${slots}</div>
-      <p class="pitch-key">4-2-3-1. Top name in each slot is the strongest available starter (each player starts once); below are the best non-starters who can cover. Injured players are struck through. Attacking right.</p></div>`;
+      <div class="depth-phone"><div class="dm-pitch" aria-hidden="true">${FC.pitch.svg('', { orient: 'v', cls: 'dm-svg', label: '', dir: false })}${mini}</div>${list}</div>
+      <p class="pitch-key">4-2-3-1. Each slot shows the strongest available starter (each player starts once) and the best cover. Injured players are struck through.</p></div>`;
   }
 
   function body() {
@@ -129,7 +143,7 @@
       const U = FC.u;
       const active = D().squad.filter((p) => p.status !== 'loaned_out');
       const avgAge = U.sum(active, (p) => p.age) / active.length;
-      const groups = [['ALL', 'All'], ['GK', 'GK'], ['DEF', 'Defence'], ['MID', 'Midfield'], ['ATT', 'Attack'], ['LOAN', 'On loan']];
+      const groups = [['ALL', 'All'], ['GK', 'GK'], ['DEF', 'DEF'], ['MID', 'MID'], ['ATT', 'ATT'], ['LOAN', 'Loans']];
       return `<header class="page-head"><div><h1>Squad</h1><p>${active.length} senior players · average age ${avgAge.toFixed(1)} · ${D().squad.length - active.length} out on loan</p></div>
         <dl class="tiles head-tiles"><div class="tile"><dt>Squad value</dt><dd>${U.money(U.sum(active, (p) => p.value))}</dd></div>
           <div class="tile"><dt>Weekly wages</dt><dd>${U.money(D().club.weeklyWageBill)}</dd></div>
