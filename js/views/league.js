@@ -66,7 +66,7 @@
       const rows = (league && D().table[league.id]) || [];
       const others = D().competitions.filter((c) => c !== league);
       const otherTables = others.filter((c) => D().table[c.id]).map((c) => `<section class="panel"><div class="panel-head"><h2>${U.esc(c.name)}</h2>
-        <p class="sub">${c.type === 'europe' ? 'League phase. Only clubs tracked in this save are listed.' : ''}</p></div>${table(c.id, D().table[c.id], { compact: true })}</section>`).join('');
+        <p class="sub">${c.type === 'europe' ? 'League phase' : ''}</p></div>${table(c.id, D().table[c.id], { compact: true })}</section>`).join('');
       const cups = others.filter((c) => c.type === 'cup' || (c.type === 'europe' && !D().table[c.id])).map((c) => cupPath(c.id)).join('');
       const md = rows.length ? rows[0].posHistory.length : 0;
       const cupsSide = md < 2 && !otherTables;   // no bump chart and no other tables yet: the cup paths fill the side column

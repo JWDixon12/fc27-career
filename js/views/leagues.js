@@ -54,7 +54,7 @@
     render(code) {
       const back = code ? `<button type="button" class="back-btn" onclick="history.length > 1 ? history.back() : (location.hash = 'leagues')"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Leagues</button>` : '';
       if (code) return `<div class="lgv">${back}${clubList(code)}</div>`;
-      return `<div class="lgv"><header class="page-head"><div><h1>Leagues</h1><p>Every club and player in this save.</p></div></header>${searchBox()}${leagueList()}</div>`;
+      return `<div class="lgv"><header class="page-head"><div><h1>Leagues</h1><p>Every club and player.</p></div></header>${searchBox()}${leagueList()}</div>`;
     },
   };
 
@@ -90,7 +90,7 @@
   FC.views.search = {
     title: () => 'Search',
     render() {
-      return `<div class="srv"><header class="page-head"><div><h1>Search</h1><p>All players in this save, best first.</p></div></header>
+      return `<div class="srv"><header class="page-head"><div><h1>Search</h1><p>All players, best first.</p></div></header>
         <input class="field sr-input" type="search" id="sr-q" placeholder="Name, club or position" value="${esc(st.q)}" aria-label="Search players" autocomplete="off">
         <div class="seg sr-seg" role="group" aria-label="Position">${GROUPS.map(([k, l]) => `<button type="button" data-srpos="${k}" aria-pressed="${st.pos === k}">${l}</button>`).join('')}</div>
         <div id="sr-out"><p class="empty-note">Loading the player index…</p></div></div>`;

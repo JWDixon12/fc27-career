@@ -128,7 +128,7 @@
 }
 
 /* ultrawide: flatten the left stack and lay the match out in three bands */
-@media (min-width: 2300px) {
+@media (min-width: 2300px) and (max-width: 0px) {
   .mc-grid .mc-stack { display: contents; }
   .mc-grid .mc-threat { order: 1; grid-column: span 4; }
   .mc-grid .mc-xg { order: 2; grid-column: span 4; }

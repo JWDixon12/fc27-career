@@ -83,8 +83,7 @@
             ${groups.length ? groups.map(([label, list]) => `<h3 class="yo-group">${label}<span>${list.length}</span></h3><ol class="yo-list">${list.map(prospectRow).join('')}</ol>`).join('') : '<p class="empty-note">No prospects in the youth squad.</p>'}</section>
           <section class="yo-sec panel yo-grads"><div class="panel-head"><h2>Academy graduates</h2><p class="sub">Promoted to the senior squad</p></div>
             ${grads.length ? `<ul class="yo-gradlist">${grads.map((p) => `<li data-player="${p.id}" tabindex="0">${U.portrait(p, 52)}<div class="yo-who"><b>${U.esc(p.name)}</b>
-              <small>${p.natFlag ? flag(p.natFlag, p.nat, 'yo-flag sm') : ''}${U.esc(p.pos)} · ${p.age} yrs${foundBy(p.id)}${p.status === 'loaned_out' && p.loan ? ` · on loan at ${U.esc(p.loan.club)}` : p.season && p.season.apps ? ` · ${U.apps(p.season.apps)}` : ' · awaiting debut'}</small></div><span class="yo-ovr">${p.ovr}</span></li>`).join('')}</ul>` : '<p class="empty-note">No academy graduates yet.</p>'}
-            <p class="yo-note">${plural(prospects.length, 'prospect')} in the youth squad. Promote from the Youth Academy screen in game; they appear here after your next save.</p></section>
+              <small>${p.natFlag ? flag(p.natFlag, p.nat, 'yo-flag sm') : ''}${U.esc(p.pos)} · ${p.age} yrs${foundBy(p.id)}${p.status === 'loaned_out' && p.loan ? ` · on loan at ${U.esc(p.loan.club)}` : p.season && p.season.apps ? ` · ${U.apps(p.season.apps)}` : ' · awaiting debut'}</small></div><span class="yo-ovr">${p.ovr}</span></li>`).join('')}</ul>` : '<p class="empty-note">No academy graduates yet.</p>'}</section>
         </div>`;
     },
   };

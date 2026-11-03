@@ -61,7 +61,7 @@
       <svg class="gp-lines" viewBox="0 0 ${g.w} ${g.h}" preserveAspectRatio="none" aria-hidden="true"><rect class="gp-turf" width="${g.w}" height="${g.h}"/><path d="${half ? halfLines() : fullLines()}"/></svg>
       ${img}
       ${dots ? `<svg class="gp-dots" viewBox="0 0 ${g.w} ${g.h}" preserveAspectRatio="none">${dots}</svg>` : ''}
-      <span class="gp-empty">Map not captured</span>
+      <span class="gp-empty">No map</span>
       ${opts.blank && !opts.raw ? `<span class="gp-none">${esc(opts.blank)}</span>` : ''}
       ${opts.caption ? `<figcaption>${esc(opts.caption)}</figcaption>` : ''}</figure>`;
   }

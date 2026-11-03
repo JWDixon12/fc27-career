@@ -49,24 +49,24 @@
     render(arg) {
       const U = FC.u;
       const list = FC.stats.captured({ extras: true });
-      if (!list.length) return '<header class="page-head"><h1>Match Centre</h1></header><p class="empty-note">No matches captured yet.</p>';
+      if (!list.length) return '<header class="page-head"><h1>Match Centre</h1></header><p class="empty-note">No matches played yet.</p>';
       const cur = list.find((x) => x.f.id === arg) || list[list.length - 1];
       const { f, m } = cur;
       if (m.facts) {
         return `<div class="mc mc-rich" style="--L:${m.sides.home.color};--R:${m.sides.away.color}">
-          <header class="page-head"><div><h1>Match Centre</h1><p>${m.realCapture ? 'Transcribed from the in-game match facts.' : ''} Maps attack upward. Shot size is xG.</p></div></header>
+          <header class="page-head"><div><h1>Match Centre</h1></div></header>
           ${picker(list, f.id)}${FC.matchRich.render(f, m)}</div>`;
       }
       const L = colorOf(f.home), R = colorOf(f.away);
       const P = FC.matchParts;
       return `<div class="mc" style="--L:${L};--R:${R}">
-        <header class="page-head"><div><h1>Match Centre</h1><p>Maps attack upward. Shot size is xG; thicker pass lines mean more passes.</p></div></header>
+        <header class="page-head"><div><h1>Match Centre</h1></div></header>
         ${picker(list, f.id)}
         ${scoreboard(f, m)}
         <div class="g12 mc-grid">
           <div class="stack mc-stack" style="--span:6">
-            <section class="panel mc-threat"><div class="panel-head"><h2>Threat</h2><p class="sub">Threat per two minutes. ${U.esc(U.team(f.home).short)} up, ${U.esc(U.team(f.away).short)} down; gold = goal.</p></div><div class="chart" id="mc-mo"></div></section>
-            <section class="panel mc-xg"><div class="panel-head"><h2>Expected goals race</h2><p class="sub">Cumulative. Large dots are goals.</p></div><div class="chart" id="mc-xg"></div></section>
+            <section class="panel mc-threat"><div class="panel-head"><h2>Threat</h2><p class="sub">${U.esc(U.team(f.home).short)} up · ${U.esc(U.team(f.away).short)} down</p></div><div class="chart" id="mc-mo"></div></section>
+            <section class="panel mc-xg"><div class="panel-head"><h2>Expected goals race</h2></div><div class="chart" id="mc-xg"></div></section>
             <section class="panel mc-shot">${P.shotMap(f, m)}</section>
           </div>
           <section class="panel mc-ev" style="--span:6">${P.timeline(f, m)}</section>

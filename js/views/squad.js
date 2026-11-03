@@ -128,7 +128,7 @@
       ${FC.pitch.svg('', { orient: 'h', cls: 'dp-h', label: 'Depth chart pitch', dir: false })}
       ${slots}</div>
       <div class="depth-phone"><div class="dm-pitch" aria-hidden="true">${FC.pitch.svg('', { orient: 'v', cls: 'dm-svg', label: '', dir: false })}${mini}</div>${list}</div>
-      <p class="pitch-key">4-2-3-1. Each slot shows the strongest available starter (each player starts once) and the best cover. Injured players are struck through.</p></div>`;
+      </div>`;
   }
 
   function body() {

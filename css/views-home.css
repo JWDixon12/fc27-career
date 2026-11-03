@@ -163,11 +163,11 @@
 }
 
 .home-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gap); }
-@media (min-width: 2300px) { .home-pair { grid-template-columns: 1fr; } }
+@media (min-width: 2300px) and (max-width: 0px) { .home-pair { grid-template-columns: 1fr; } }
 @media (max-width: 999px) { .home-pair { grid-template-columns: 1fr; } }
 .home-pair > .panel { min-width: 0; }
 
-@media (min-width: 2300px) {
+@media (min-width: 2300px) and (max-width: 0px) {
   .home-pair.grow { display: flex; flex-direction: column; }
   .home-pair .leaders-panel { flex: 1 1 auto; display: flex; flex-direction: column; }
   .home-pair .leaders { flex: 1 1 auto; grid-auto-rows: 1fr; }

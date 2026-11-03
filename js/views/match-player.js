@@ -30,8 +30,7 @@
 
   function statList(p, tab) {
     if (tab === 'summary') {
-      return `<table class="perf-stats mp-stats"><thead><tr><th></th><th class="n">Player</th><th class="n">Team</th></tr></thead><tbody>${p.summary.map((r) => `<tr><td>${esc(r.label)}</td><td class="n">${r.value}</td><td class="n">${r.team}</td></tr>`).join('')}</tbody></table>
-        <p class="mp-note">Team column: totals for counts, team average for minutes and distance (as in the game).</p>`;
+      return `<table class="perf-stats mp-stats"><thead><tr><th></th><th class="n">Player</th><th class="n">Team</th></tr></thead><tbody>${p.summary.map((r) => `<tr><td>${esc(r.label)}</td><td class="n">${r.value}</td><td class="n">${r.team}</td></tr>`).join('')}</tbody></table>`;
     }
     const secs = (p.tabs && p.tabs[tab]) || [];
     return `<table class="perf-stats mp-stats"><tbody>${secs.map((s) => `<tr class="mp-sec"><th colspan="2">${esc(s.section)}</th></tr>${s.rows.map((r) => `<tr><td>${esc(r.label)}</td><td class="n">${typeof r.value === 'number' && !Number.isInteger(r.value) ? r.value.toFixed(2) : r.value}</td></tr>`).join('')}`).join('')}</tbody></table>`;
@@ -44,7 +43,7 @@
         ${FC.gp.map({ src: p.maps.gk_shots, half: true, color, caption: 'All shots faced', label: `${p.name}: shots faced`, blank: (p.blankMaps || []).includes('gk_shots') ? 'None this match' : '' })}`;
     }
     const key = TAB_MAP[tab];
-    if (!p.maps[key]) return '<p class="empty-note">This map was not captured.</p>';
+    if (!p.maps[key]) return '<p class="empty-note">No map for this match.</p>';
     const slots = tab === 'summary' && p.slot ? [...m.players.filter((q) => q.side === p.side && q.slot && q.key !== p.key).map((q) => ({ ...q.slot, label: `${q.pos} ${q.name}` })), { ...p.slot, me: true, label: `${p.pos} ${p.name}` }] : [];
     const blank = (p.blankMaps || []).includes(key) ? 'None this match' : '';
     return FC.gp.map({ src: p.maps[key], color, slots, blank, caption: MAP_CAPTION[key], label: `${p.name}: ${MAP_CAPTION[key]}` });
@@ -58,7 +57,7 @@
     const subs = p.subRatings ? `<ul class="subr">${SUBS.filter(([k]) => p.subRatings[k]).map(([k, l]) => {
       const s = p.subRatings[k];
       return `<li><span>${l}</span><span class="subr-track"><i style="width:${s.rating * 10}%" class="${rClass(s.rating)}"></i></span><b>${s.rating.toFixed(1)}</b><small class="w" title="How much this area counted toward the match rating">${esc(s.weight)}</small></li>`;
-    }).join('')}</ul>` : `<p class="empty-note">Detailed ratings were captured for ${esc(m.sides[m.players.find((q) => q.subRatings).side].name)} only.</p>`;
+    }).join('')}</ul>` : `<p class="empty-note">Detailed ratings: ${esc(m.sides[m.players.find((q) => q.subRatings).side].name)} only.</p>`;
     const sq = typeof p.id === 'number' && FC.u.player(p.id);
     return `<article class="mp-panel" aria-live="polite">
       <header class="mp-head"><img class="mp-big" src="${esc(p.face)}" alt="" width="118" height="162" onerror="this.style.visibility='hidden'">

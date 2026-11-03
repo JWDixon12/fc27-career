@@ -28,7 +28,7 @@
 
   function heatStrip(p) {
     const srcs = heatSources(p);
-    if (!srcs.length) return '<p class="empty-note">No heatmap captured yet.</p>';
+    if (!srcs.length) return '<p class="empty-note">No heatmap yet.</p>';
     const thumbs = srcs.map((s, i) => {
       const opp = FC.u.team(FC.u.opponent(s.f));
       const mini = s.grid ? FC.pitch.svg(FC.pitch.heat(s.grid, 'h', 'var(--home)'), { orient: 'h', dir: false, label: '' }) : `<img src="${esc(s.img)}.webp" alt="">`;
@@ -61,7 +61,7 @@
   function per90(p) {
     const lines = FC.stats.linesFor(p.id).map((x) => x.ln);
     const mins = lines.reduce((s, l) => s + (l.mins || 0), 0);
-    if (mins < 45) return '<p class="empty-note">Per-90 rates appear after 45 captured minutes.</p>';
+    if (mins < 45) return '<p class="empty-note">Per-90 rates after 45 minutes.</p>';
     const rows = DEEP.map(([k, label, dp]) => {
       const have = lines.filter((l) => l[k] != null);
       if (!have.length) return '';
@@ -69,8 +69,7 @@
       const tot = have.reduce((s, l) => s + l[k], 0);
       return `<tr><td>${label}</td><td class="n">${FC.u.num(tot, dp === 1 ? 1 : k === 'xa' ? 2 : 0)}</td><td class="n"><b>${m ? FC.u.num((tot / m) * 90, dp) : '—'}</b></td><td class="n muted">${m}</td></tr>`;
     }).join('');
-    return `<div class="table-wrap"><table class="data"><thead><tr><th>Stat</th><th class="n">Total</th><th class="n">Per 90</th><th class="n">Mins</th></tr></thead><tbody>${rows}</tbody></table></div>
-      <p class="pitch-key"><span>Counted from matches with Player Performance captured (Mins column).</span></p>`;
+    return `<div class="table-wrap"><table class="data"><thead><tr><th>Stat</th><th class="n">Total</th><th class="n">Per 90</th><th class="n">Mins</th></tr></thead><tbody>${rows}</tbody></table></div>`;
   }
 
   FC.playerSeason = { heatStrip, bindStrip, per90 };

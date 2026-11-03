@@ -118,7 +118,7 @@
   /* ---------- pre-season ---------- */
   function preseason() {
     const L = FC.statsData.attributeLeaders();
-    return `<p class="st-note">No matches captured yet. Real 2025/26 numbers for the current squad until the first match.</p>
+    return `
       <section class="st-sec"><h3 class="st-h">Last season <small>2025/26, real-world, all clubs</small></h3><div id="st-last"><p class="empty-note">Loading…</p></div></section>
       <section class="st-sec"><h3 class="st-h">Attribute leaders</h3><ol class="ld-strip">${L.map((x) => `<li><button type="button" class="ld-card" data-player="${x.p.id}">${FC.u.portrait(x.p, 72)}<span>${esc(x.label)}</span><b>${x.v}</b><small>${esc(x.p.short)}</small></button></li>`).join('')}</ol></section>`;
   }
@@ -137,7 +137,7 @@
   FC.views.stats = {
     render() {
       const live = FC.stats.captured().length > 0;
-      return `<header class="page-head"><div><h1>Stats</h1><p>${live ? `${FC.stats.captured().length} ${FC.stats.captured().length === 1 ? 'match' : 'matches'} captured, all competitions.` : `${esc(D().meta.season)} has not started.`}</p></div></header>
+      return `<header class="page-head"><div><h1>Stats</h1><p>${live ? `${FC.stats.captured().length} ${FC.stats.captured().length === 1 ? 'match' : 'matches'} played · all competitions` : `${esc(D().meta.season)} has not started.`}</p></div></header>
         ${live ? `<div id="st-ctl">${bar()}</div><div id="st-body"></div>` : preseason()}`;
     },
     after(root) {

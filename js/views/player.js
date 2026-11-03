@@ -15,7 +15,7 @@
   function radar(p) {
     const all = per90Table();
     const me = all.find((r) => r.id === p.id);
-    if (!me) return '<p class="empty-note">Needs 90 minutes of captured matches.</p>';
+    if (!me) return '<p class="empty-note">Available after 90 minutes.</p>';
     const outfield = all.filter((r) => FC.u.player(r.id) && FC.u.player(r.id).pos !== 'GK');
     const max = RADAR.map((_, i) => Math.max(...all.map((r) => r.v[i]), 0.01));
     const avg = RADAR.map((_, i) => outfield.reduce((s, r) => s + r.v[i], 0) / (outfield.length || 1));
@@ -57,17 +57,17 @@
               <div class="tile"><dt>Release</dt><dd>${p.releaseClause ? U.money(p.releaseClause) : 'No clause'}</dd></div></dl></section>
           ${hist.length > 1 ? `<section class="panel"><div class="panel-head"><h3>Overall history</h3><p class="sub">${hist.map((h) => `${U.date(h.date, 'short')}: ${h.ovr}`).join(' · ')}</p></div>
             <div class="chart" id="pp-ovr"></div></section>` : ''}
-          <section class="panel pp-wide"><div class="panel-head"><h3>This season</h3><p class="sub">All competitions, captured matches</p></div>
+          <section class="panel pp-wide"><div class="panel-head"><h3>This season</h3><p class="sub">All competitions</p></div>
             <dl class="tiles">${[['Apps', s.apps], ['Starts', s.starts], ['Minutes', U.num(s.mins)], ['Goals', s.goals], ['Assists', s.assists],
               ['Avg rating', s.avgRating ? s.avgRating.toFixed(2) : '—'], ['POTM', s.motm], ['Clean sheets', s.cleanSheets], ['Cards', `${s.yellows || 0} / ${s.reds || 0}`]]
               .map(([l, v]) => `<div class="tile"><dt>${l}</dt><dd>${v == null ? '—' : v}</dd></div>`).join('')}</dl></section>
           ${lines.length ? `
           <section class="panel pp-wide"><div class="panel-head"><h3>Rating by match</h3><p class="sub">Line shows the season average</p></div>
-            ${lines.length ? '<div class="chart" id="pp-rat"></div>' : '<p class="empty-note">No captured appearances yet.</p>'}</section>
+            ${lines.length ? '<div class="chart" id="pp-rat"></div>' : '<p class="empty-note">No appearances yet.</p>'}</section>
           <section class="panel"><div class="panel-head"><h3>Where he plays</h3><p class="sub">By match or combined</p></div>${FC.playerSeason.heatStrip(p)}</section>
           <section class="panel"><div class="panel-head"><h3>Per 90 vs squad</h3><p class="sub">Scaled to the squad best on each axis</p></div>${radar(p)}</section>
-          <section class="panel pp-wide"><div class="panel-head"><h3>Deeper numbers per 90</h3><p class="sub">From the game's Player Performance screens</p></div>${FC.playerSeason.per90(p)}</section>
-          ` : FC.u.ghostCard('No matches yet', 'Ratings, heatmaps and per-90 numbers start with his first captured match.')}
+          <section class="panel pp-wide"><div class="panel-head"><h3>Deeper numbers per 90</h3></div>${FC.playerSeason.per90(p)}</section>
+          ` : FC.u.ghostCard('No matches yet', 'Ratings, heatmaps and per-90 numbers appear after his first appearance.')}
           ${lines.length ? `<section class="panel pp-wide"><div class="panel-head"><h3>Match log</h3></div><div class="table-wrap"><table class="data"><thead><tr><th>Date</th><th>Opponent</th><th>Comp</th><th>Pos</th><th class="n">Min</th><th class="n">G</th><th class="n">A</th><th class="n">Shots</th><th class="n">Pass %</th><th class="n">Tackles</th><th class="n">mi</th><th class="n">Rating</th></tr></thead><tbody>
             ${lines.map(({ f, ln }) => `<tr data-href="match/${f.id}" tabindex="0"><td>${U.date(f.date, 'short')}</td><td><span class="who">${U.crest(U.opponent(f), 20)}${U.esc(U.team(U.opponent(f)).short)} <small>${f.venue}</small></span></td>
               <td>${U.compChip(f.comp)}</td><td>${ln.pos}</td><td class="n">${ln.mins}</td><td class="n">${ln.goals}</td><td class="n">${ln.assists}</td><td class="n">${ln.shots}</td><td class="n">${ln.passAcc}</td><td class="n">${ln.tackles}</td><td class="n">${ln.distanceKm}</td>
