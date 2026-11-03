@@ -26,7 +26,7 @@
   function passing(f, m) {
     const u = U();
     const acc = (t) => `${m.teamStats.passes[t === f.home ? 0 : 1]} passes · ${m.teamStats.passAcc[t === f.home ? 0 : 1]}%`;
-    return `<div class="panel-head"><h2>Passing network</h2><p class="sub">Starting XI average positions by shirt number</p></div>
+    return `<div class="panel-head"><h2>Passing network</h2><p class="sub">Starting XI, average positions</p></div>
       ${pair(f, (t) => FC.pitch.svg(FC.pitch.passNet(m.passNetwork[String(t)], 'v', col(t)), { orient: 'v', label: `${u.team(t).name} passing network` }), acc)}
       <p class="pitch-key"><span>Thicker line = more passes between the pair</span><span>Bigger circle = more touches</span></p>`;
   }
@@ -34,7 +34,7 @@
   function heatmaps(f, m) {
     const u = U();
     const poss = (t) => `${m.possession[t === f.home ? 0 : 1]}% possession`;
-    return `<div class="panel-head"><h2>Team heatmaps</h2><p class="sub">Where each side had the ball</p></div>
+    return `<div class="panel-head"><h2>Team heatmaps</h2><p class="sub"></p></div>
       ${pair(f, (t) => {
         const g = m.heatmaps && m.heatmaps.team && m.heatmaps.team[String(t)];
         if (g && typeof g === 'string') return `<img class="heat-img" src="${u.esc(g)}" alt="${u.esc(u.team(t).name)} heatmap" onerror="this.replaceWith(Object.assign(document.createElement('p'),{className:'empty-note',textContent:'Heatmap image missing'}))">`;
@@ -75,7 +75,7 @@
     if (!lines.find((p) => p.id === perfPlayer)) perfPlayer = (lines.find((p) => p.motm) || lines[0] || {}).id;
     const name = (p) => p.name || u.personName(p.id);
     const rows = lines.map((p) => `<tr data-line="${p.id}" class="${p.id === perfPlayer ? 'sel' : ''}" tabindex="0" aria-selected="${p.id === perfPlayer}">
-      <td><span class="pos-tag pg-${u.posGroup(p.pos)}">${p.pos}</span></td><td><b>${u.esc(name(p))}</b>${p.motm ? ' <span class="motm" title="Player of the match">★ MOTM</span>' : ''}${p.mins < 45 ? ' <small class="muted">sub</small>' : ''}</td>
+      <td><span class="pos-tag pg-${u.posGroup(p.pos)}">${p.pos}</span></td><td><b>${u.esc(name(p))}</b>${p.motm ? ' <span class="chip">POTM</span>' : ''}${p.mins < 45 ? ' <small class="muted">sub</small>' : ''}</td>
       <td class="n"><span class="rating ${u.ratingClass(p.rating)}">${p.rating.toFixed(1)}</span></td><td class="n">${p.mins}</td><td class="n">${p.goals}</td><td class="n">${p.assists}</td>
       <td class="n">${p.shots}</td><td class="n">${p.passes}</td><td class="n">${p.passAcc}%</td><td class="n">${p.keyPasses}</td><td class="n">${p.dribbles}</td><td class="n">${p.tackles}</td><td class="n">${p.interceptions}</td><td class="n">${p.distanceKm}</td></tr>`).join('');
     const sel = lines.find((p) => p.id === perfPlayer);

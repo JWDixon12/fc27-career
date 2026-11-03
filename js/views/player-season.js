@@ -36,7 +36,7 @@
     }).join('');
     return `<div class="hs" data-hs-count="${srcs.length}"><div class="hs-big">${bigMap(srcs, null)}</div>
       <div class="hs-strip"><button type="button" class="hs-all" data-hs="all" aria-pressed="true">All ${srcs.length}</button>${thumbs}</div>
-      <p class="pitch-key"><span><i class="ramp" style="--c:var(--home)"></i>Fewer → more touches</span><span>Pick a match or see all combined</span></p></div>`;
+      </div>`;
   }
 
   function bindStrip(root, p) {
@@ -70,7 +70,7 @@
       return `<tr><td>${label}</td><td class="n">${FC.u.num(tot, dp === 1 ? 1 : k === 'xa' ? 2 : 0)}</td><td class="n"><b>${m ? FC.u.num((tot / m) * 90, dp) : '—'}</b></td><td class="n muted">${m}</td></tr>`;
     }).join('');
     return `<div class="table-wrap"><table class="data"><thead><tr><th>Stat</th><th class="n">Total</th><th class="n">Per 90</th><th class="n">Mins</th></tr></thead><tbody>${rows}</tbody></table></div>
-      <p class="pitch-key"><span>Stats the game only shows on Player Performance count from the matches where they were captured (Mins column).</span></p>`;
+      <p class="pitch-key"><span>Counted from matches with Player Performance captured (Mins column).</span></p>`;
   }
 
   FC.playerSeason = { heatStrip, bindStrip, per90 };

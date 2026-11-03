@@ -25,21 +25,30 @@
       <p class="sb-xg">${m.xg[i].toFixed(2)} xG · ${m.possession[i]}% possession</p><ul class="sb-goals">${goals(s)}</ul></div>`;
     const paused = m.minutesPlayed && m.minutesPlayed < 90;
     return `<section class="scoreboard" aria-label="Score">
-      <header>${f.comp ? U.compChip(f.comp) : ''}<span>${esc(m.label || '')}</span>${m.realCapture ? '<span class="real-chip">Real capture</span>' : ''}</header>
+      <header>${f.comp ? U.compChip(f.comp) : ''}</header>
       <div class="sb-main">${side('home', 0)}<div class="sb-score"><b>${m.score[0]}</b><i>:</i><b>${m.score[1]}</b><small>${paused ? `Paused at ${esc(m.clock)}` : 'Full time'}</small></div>${side('away', 1)}</div></section>`;
   }
 
-  /** Game-style list: section headings, value | label | value, leader marked with a side-coloured bar. */
+  const LOWER = /Beaten|Fouls|Yellow|Red|Recovery|Penalties Committed|Offside/i;
+  const toRow = (r) => ({ label: r.label.replace(' %', '').replace('Expected Goals', 'xG'), values: r.values, lowerBetter: LOWER.test(r.label), fmt: fmt });
+
+  /** Game lists as mirrored rows with tracks, one plain heading per section. */
   function list(sections) {
-    return `<div class="glist">${sections.map((sec) => `<h4>${esc(sec.section)}</h4>${sec.rows.map((r) => {
-      const [a, b] = r.values;
-      const lead = a === b ? -1 : a > b ? 0 : 1;
-      const lower = /Beaten|Fouls|Yellow|Red|Recovery|Penalties Committed|Offside/i.test(r.label);
-      const win = lower ? (lead === -1 ? -1 : 1 - lead) : lead;
-      const g = r.goals || [0, 0];
-      return `<div class="gl-row"><span class="gl-v ${win === 0 ? 'lead' : ''}">${fmt(a)}${g[0] ? ` <i class="gl-goal" title="${g[0]} goal">●</i>` : ''}</span>
-        <span class="gl-l">${esc(r.label)}</span><span class="gl-v ${win === 1 ? 'lead' : ''}">${g[1] ? `<i class="gl-goal" title="${g[1]} goal">●</i> ` : ''}${fmt(b)}</span></div>`;
-    }).join('')}`).join('')}</div>`;
+    return `<div class="glist">${sections.map((sec) => `<h4>${esc(sec.section)}</h4>${FC.chart.compare(sec.rows.map(toRow))}`).join('')}</div>`;
+  }
+
+  /** Summary in score-app order: Possession, Shots, On target, xG, Passes, Tackles; the rest folded. */
+  function summary(m) {
+    const rows = m.facts.summary[0].rows;
+    const get = (l) => rows.find((r) => r.label === l);
+    const pct = (v) => `${v}%`;
+    const head = [get('Possession %'), get('Shots'), { label: 'On target', values: m.teamStats.onTarget }, get('Expected Goals'), get('Passes'), get('Tackles')].filter(Boolean);
+    const rest = rows.filter((r) => !head.includes(r) && !/Line Breaks/.test(r.label));
+    const rates = [['Dribble success', 'dribbleSuccess'], ['Shot accuracy', 'shotAccuracy'], ['Pass accuracy', 'passAccuracy'], ['Tackle success', 'tackleSuccess']]
+      .map(([l, k]) => ({ label: l, values: m.rings[k], fmt: pct }));
+    const lb = rows.filter((r) => /Line Breaks/.test(r.label)).map((r) => ({ ...toRow(r), label: r.label.replace('Def Line Breaks ', 'Line breaks, ').replace(', A', ', a').replace(', T', ', t').replace(', O', ', o') }));
+    return FC.chart.compare(head.map((r) => (r.values ? (r.label === 'On target' ? r : { ...toRow(r), fmt: r.label === 'Possession %' ? pct : fmt }) : r)))
+      + `<details class="more-stats"><summary>All stats <span>${rest.length + rates.length + lb.length} more</span></summary>${FC.chart.compare([...rates, ...rest.map(toRow), ...lb])}</details>`;
   }
 
   /** Vertical threat strip like the game: minute 0 at the top, home bars left, away bars right. */
@@ -68,16 +77,11 @@
   }
 
   function sideCol(f, m, tab, s, i) {
-    const r = RING[tab];
     const color = i ? 'var(--R)' : 'var(--L)';
-    const ring = r ? FC.gp.ring(m.rings[r[0]][i], r[1], color) : '';
-    if (tab === 'summary') {
-      return `<div class="gm-side">${['dribbleSuccess', 'shotAccuracy', 'passAccuracy'].map((k, j) => FC.gp.ring(m.rings[k][i], ['Dribble success', 'Shot accuracy', 'Pass accuracy'][j], color)).join('')}</div>`;
-    }
     const v = st.view[tab] || VIEWS[tab][0][0];
     const fm = m.factsMaps[v];
     const label = (VIEWS[tab].find((x) => x[0] === v) || [])[1];
-    return `<div class="gm-side">${ring}${FC.gp.map({ src: fm && fm[s], half: fm && fm.half, raw: st.raw, color, label: `${sideName(m, s)}: ${label}`, caption: label })}</div>`;
+    return `<div class="gm-side"><span class="gm-team">${esc(sideName(m, s))}</span>${FC.gp.map({ src: fm && fm[s], half: fm && fm.half, raw: st.raw, color, label: `${sideName(m, s)}: ${label}` })}</div>`;
   }
 
   function events(f, m) {
@@ -94,25 +98,20 @@
 
   function body(f, m) {
     const tab = st.tab;
-    const views = VIEWS[tab];
-    const tools = views ? `<div class="gm-tools"><div class="seg" role="group" aria-label="Map view">${views.map(([k, l]) => `<button type="button" data-gview="${k}" aria-pressed="${(st.view[tab] || views[0][0]) === k}">${l}</button>`).join('')}</div>
-      <div class="seg" role="group" aria-label="Map style"><button type="button" data-graw="0" aria-pressed="${!st.raw}">Clean</button><button type="button" data-graw="1" aria-pressed="${st.raw}">Original</button></div></div>` : '';
     if (tab === 'events') return events(f, m);
-    let centre = list(m.facts[tab]);
-    if (tab === 'summary') {
-      const lb = m.facts.summary[0].rows.filter((r) => /Line Breaks/.test(r.label));
-      const rest = m.facts.summary[0].rows.filter((r) => !/Line Breaks|Possession %|Expected Goals|^Shots$/.test(r.label));
-      centre = FC.chart.statStrip(m, [m.sides.home.short, m.sides.away.short]) + list([{ section: 'Summary', rows: rest.slice(0, 7) }])
-        + `<details class="more-stats"><summary>All stats <span>${rest.length - 7 + lb.length} more</span></summary>${list([{ section: 'More', rows: rest.slice(7) }, { section: 'Defensive line breaks', rows: lb }])}</details>`;
-    }
-    if (tab === 'possession') centre = threat(m) + centre;
+    if (tab === 'summary') return `<div class="gm-solo">${summary(m)}</div>`;
+    const views = VIEWS[tab];
+    const tools = `<div class="gm-tools"><div class="seg" role="group" aria-label="Map view">${views.map(([k, l]) => `<button type="button" data-gview="${k}" aria-pressed="${(st.view[tab] || views[0][0]) === k}">${l}</button>`).join('')}</div>
+      <div class="seg" role="group" aria-label="Map style"><button type="button" data-graw="0" aria-pressed="${!st.raw}">Clean</button><button type="button" data-graw="1" aria-pressed="${st.raw}">Original</button></div></div>`;
+    const r = RING[tab];
+    const rate = r ? FC.chart.compare([{ label: r[1], values: m.rings[r[0]], fmt: (v) => `${v}%` }]) : '';
+    const centre = (tab === 'possession' ? threat(m) : '') + rate + list(m.facts[tab].filter((sec) => tab !== 'possession'));
     return `${tools}<div class="gm-grid">${sideCol(f, m, tab, 'home', 0)}<div class="gm-centre">${centre}</div>${sideCol(f, m, tab, 'away', 1)}</div>`;
   }
 
   function render(f, m) {
     return `${scoreboard(f, m)}
-      <section class="panel gm" aria-label="Match facts"><div class="panel-head"><h2>Match facts</h2>
-        <p class="sub cmp-key"><span><i style="--c:var(--L)"></i>${esc(sideName(m, 'home'))}</span><span><i style="--c:var(--R)"></i>${esc(sideName(m, 'away'))}</span></p></div>
+      <section class="panel gm" aria-label="Match facts"><div class="panel-head"><h2>Match facts</h2></div>
         <nav class="gm-tabs" role="tablist">${TABS.map(([k, l]) => `<button type="button" role="tab" data-gtab="${k}" aria-selected="${st.tab === k}">${l}</button>`).join('')}</nav>
         <div class="gm-body" id="gm-body">${body(f, m)}</div></section>
       <section class="panel" id="mp-section">${FC.matchPlayer.render(f, m)}</section>`;

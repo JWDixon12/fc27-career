@@ -111,6 +111,9 @@
       throw err;
     }
     if (FC.nav) FC.nav.mount();
+    const setH = () => document.documentElement.style.setProperty('--mast-h', `${document.querySelector('.mast').offsetHeight}px`);
+    setH();
+    window.addEventListener('resize', setH);
     window.addEventListener('hashchange', route);
     route();
     document.body.classList.add('ready');

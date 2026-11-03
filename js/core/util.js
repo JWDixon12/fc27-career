@@ -115,9 +115,8 @@
   const goalsFor = (m, teamId) => (m ? m.events.filter((e) => /goal/.test(e.type) && e.team === teamId)
     .map((e) => `${esc(personName(e.player))} ${e.minute}'${e.type === 'pen_goal' ? ' (pen)' : e.type === 'own_goal' ? ' (og)' : ''}`) : []);
   const apps = (n) => `${n} app${n === 1 ? '' : 's'}`;
-  /** Ghosted preview card used instead of apology text when a module has no data yet. */
-  const ghostCard = (title, body) => `<section class="panel ghost-card pp-wide"><span class="overline">Coming soon</span><h3>${esc(title)}</h3><p>${esc(body)}</p>
-    <div class="gc-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></section>`;
+  /** Plain empty-state block: a factual heading and one line. */
+  const ghostCard = (title, body) => `<section class="panel ghost-card pp-wide"><h3>${esc(title)}</h3><p>${esc(body)}</p></section>`;
   const ratingClass = (r) => (r == null ? '' : r >= 8 ? 'r-elite' : r >= 7 ? 'r-good' : r >= 6 ? 'r-ok' : 'r-poor');
   const sum = (a, f) => a.reduce((s, x) => s + (f ? f(x) : x), 0);
   const posGroup = (pos) =>

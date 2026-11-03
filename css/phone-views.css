@@ -28,17 +28,17 @@
   width: 100%; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 12px;
   min-height: 64px; padding: 8px 4px; border: 0; border-bottom: 1px solid var(--rule); background: none; text-align: left; cursor: pointer;
 }
-.sq-row .face, .sq-row .face-fb { width: 48px; height: 48px; }
+.sq-row .face, .sq-row .face-fb { width: 40px; height: 40px; }
 .sq-main { display: flex; flex-direction: column; min-width: 0; }
 .sq-main b { display: flex; align-items: center; gap: 6px; font-size: 16px; font-weight: 700; }
 .sq-main small { font-size: 12px; color: var(--ash); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .sq-pos { font-family: var(--f-display); font-size: 13px; font-weight: 800; letter-spacing: 0.04em; }
 .sq-main .pl-flag { align-self: flex-start; margin: 3px 0 0; }
-.sq-ovr { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 12px; font-family: var(--f-display); font-weight: 900; font-size: 26px; }
-.ov-elite { background: linear-gradient(160deg, #f5d76e, #b08a1e); color: #1a1406; }
-.ov-high { background: linear-gradient(160deg, #3fcf6a, #1b7a3a); color: #04140a; }
-.ov-mid { background: linear-gradient(160deg, #7fb8ec, #3d6f9e); color: #06121e; }
-.ov-low { background: var(--tier-2); color: var(--chalk); }
+.sq-ovr { display: grid; place-items: center; min-width: 40px; height: 32px; padding: 0 6px; border: 1px solid var(--rule-2); border-radius: 4px; font: 700 16px/1 var(--f-text); }
+.ov-elite { color: var(--chalk); border-color: var(--chalk); }
+.ov-high { color: var(--chalk); }
+.ov-mid { color: var(--ash); }
+.ov-low { color: var(--mute); }
 
 @media (max-width: 760px) {
   .sq-list { display: block; }
@@ -122,3 +122,8 @@
 }
 .lg-pre-side > .ghost-card { flex: 1 1 auto; display: flex; flex-direction: column; }
 .lg-pre-side > .ghost-card .gc-bars { margin-top: auto; height: max(56px, 40%); }
+
+.sq-extra { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; margin-top: 40px; }
+@media (min-width: 1000px) { .sq-extra { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); align-items: start; } }
+.sq-main b { font-weight: 500; font-size: 15px; }
+.sq-pos { color: var(--mute); font: 600 11px/1 var(--f-text); letter-spacing: 0.04em; }

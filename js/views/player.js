@@ -15,7 +15,7 @@
   function radar(p) {
     const all = per90Table();
     const me = all.find((r) => r.id === p.id);
-    if (!me) return '<p class="empty-note">Needs 90+ minutes in captured matches for a per-90 profile.</p>';
+    if (!me) return '<p class="empty-note">Needs 90 minutes of captured matches.</p>';
     const outfield = all.filter((r) => FC.u.player(r.id) && FC.u.player(r.id).pos !== 'GK');
     const max = RADAR.map((_, i) => Math.max(...all.map((r) => r.v[i]), 0.01));
     const avg = RADAR.map((_, i) => outfield.reduce((s, r) => s + r.v[i], 0) / (outfield.length || 1));
@@ -60,16 +60,16 @@
               ['Avg rating', s.avgRating ? s.avgRating.toFixed(2) : '—'], ['POTM', s.motm], ['Clean sheets', s.cleanSheets], ['Cards', `${s.yellows || 0} / ${s.reds || 0}`]]
               .map(([l, v]) => `<div class="tile"><dt>${l}</dt><dd>${v == null ? '—' : v}</dd></div>`).join('')}</dl></section>
           ${lines.length ? `
-          <section class="panel pp-wide"><div class="panel-head"><h3>Rating by match</h3><p class="sub">Line = season average. Click a bar for the Match Centre.</p></div>
+          <section class="panel pp-wide"><div class="panel-head"><h3>Rating by match</h3><p class="sub">Line shows the season average</p></div>
             ${lines.length ? '<div class="chart" id="pp-rat"></div>' : '<p class="empty-note">No captured appearances yet.</p>'}</section>
-          <section class="panel"><div class="panel-head"><h3>Where he plays</h3><p class="sub">Each captured match, or all combined</p></div>${FC.playerSeason.heatStrip(p)}</section>
-          <section class="panel"><div class="panel-head"><h3>Per 90 vs squad</h3><p class="sub">Scaled to the squad's best per-90 on each axis</p></div>${radar(p)}</section>
+          <section class="panel"><div class="panel-head"><h3>Where he plays</h3><p class="sub">By match or combined</p></div>${FC.playerSeason.heatStrip(p)}</section>
+          <section class="panel"><div class="panel-head"><h3>Per 90 vs squad</h3><p class="sub">Scaled to the squad best on each axis</p></div>${radar(p)}</section>
           <section class="panel pp-wide"><div class="panel-head"><h3>Deeper numbers per 90</h3><p class="sub">From the game's Player Performance screens</p></div>${FC.playerSeason.per90(p)}</section>
-          ` : FC.u.ghostCard('His season fills in here', 'Match ratings, heatmaps and per-90 numbers appear after his first captured match.')}
+          ` : FC.u.ghostCard('No matches yet', 'Ratings, heatmaps and per-90 numbers start with his first captured match.')}
           ${lines.length ? `<section class="panel pp-wide"><div class="panel-head"><h3>Match log</h3></div><div class="table-wrap"><table class="data"><thead><tr><th>Date</th><th>Opponent</th><th>Comp</th><th>Pos</th><th class="n">Min</th><th class="n">G</th><th class="n">A</th><th class="n">Shots</th><th class="n">Pass %</th><th class="n">Tackles</th><th class="n">km</th><th class="n">Rating</th></tr></thead><tbody>
             ${lines.map(({ f, ln }) => `<tr data-href="match/${f.id}" tabindex="0"><td>${U.date(f.date, 'short')}</td><td><span class="who">${U.crest(U.opponent(f), 20)}${U.esc(U.team(U.opponent(f)).short)} <small>${f.venue}</small></span></td>
               <td>${U.compChip(f.comp)}</td><td>${ln.pos}</td><td class="n">${ln.mins}</td><td class="n">${ln.goals}</td><td class="n">${ln.assists}</td><td class="n">${ln.shots}</td><td class="n">${ln.passAcc}</td><td class="n">${ln.tackles}</td><td class="n">${ln.distanceKm}</td>
-              <td class="n"><span class="rating ${U.ratingClass(ln.rating)}">${ln.rating.toFixed(1)}</span>${ln.motm ? ' <span class="motm" title="Player of the match">★</span>' : ''}</td></tr>`).join('')}</tbody></table></div></section>` : ''}
+              <td class="n"><span class="rating ${U.ratingClass(ln.rating)}">${ln.rating.toFixed(1)}</span>${ln.motm ? ' <span class="chip">POTM</span>' : ''}</td></tr>`).join('')}</tbody></table></div></section>` : ''}
         </div></article>`;
     },
     after(root, p) {
@@ -87,7 +87,7 @@
       if (el) {
         const avg = lines.reduce((s, l) => s + l.ln.rating, 0) / lines.length;
         FC.chart.mount(el, (w) => FC.chart.columns({
-          items: lines.map(({ f, ln }) => ({ label: U.team(U.opponent(f)).short, value: ln.rating, href: `match/${f.id}`, mark: ln.motm ? '★' : '',
+          items: lines.map(({ f, ln }) => ({ label: U.team(U.opponent(f)).short, value: ln.rating, href: `match/${f.id}`, mark: '',
             color: U.comp(f.comp).color,
             tip: `<strong>${U.esc(U.team(U.opponent(f)).name)} (${f.venue})</strong>${U.esc(U.comp(f.comp).name)} · ${U.date(f.date)}<br>Rating ${ln.rating.toFixed(1)} · ${ln.mins}'${ln.goals ? ` · ${ln.goals} G` : ''}${ln.assists ? ` · ${ln.assists} A` : ''}` })),
           yMin: 5, yMax: 10, yTicks: [5, 6, 7, 8, 9, 10], height: 200, fmt: (v) => String(v), ref: { value: avg, label: `Average ${avg.toFixed(2)}` },

@@ -37,14 +37,14 @@
       const ts = FC.stats.teamSeries();
       const U = FC.u;
       const gf = U.sum(ts, (x) => x.gf), ga = U.sum(ts, (x) => x.ga), xgf = U.sum(ts, (x) => x.xgFor), xga = U.sum(ts, (x) => x.xgAg);
-      return `<header class="page-head"><div><h1>Stats</h1><p>${ts.length} captured matches, all competitions. Averages need two or more appearances; per-90 needs 90+ minutes.</p></div>
+      return `<header class="page-head"><div><h1>Stats</h1><p>${ts.length ? `${ts.length} matches captured, all competitions. Averages need two appearances; per-90 needs 90 minutes.` : 'No matches captured.'}</p></div>
         <dl class="tiles head-tiles four"><div class="tile"><dt>Goals for / against</dt><dd>${gf}–${ga}</dd></div><div class="tile"><dt>xG for / against</dt><dd>${xgf.toFixed(1)}–${xga.toFixed(1)}</dd></div>
           <div class="tile"><dt>Goals minus xG</dt><dd>${(gf - xgf >= 0 ? '+' : '') + (gf - xgf).toFixed(1)}</dd></div><div class="tile"><dt>Avg possession</dt><dd>${ts.length ? Math.round(U.sum(ts, (x) => x.poss) / ts.length) : 0}%</dd></div></dl></header>
-        ${ts.length ? '' : U.ghostCard('Season charts start on matchday 1', 'Scoring race, expected-goals trend, shots and every leaderboard fill in as matches are captured.')}
+        ${ts.length ? '' : U.ghostCard('No matches played', 'Leaderboards and charts start with the first captured match.')}
         <div class="g12" ${ts.length ? '' : 'hidden'}>
           <section class="panel stretch" style="--span:6;--xl:4"><div class="panel-head"><h2>Scoring race</h2><p class="sub">Cumulative goals, top four scorers</p></div><div class="chart" id="st-race"></div></section>
-          <section class="panel stretch" style="--span:6;--xl:4"><div class="panel-head"><h2>Expected goals trend</h2><p class="sub">Per match, dashed = three-match rolling average</p></div><div class="chart" id="st-xg"></div></section>
-          <section class="panel stretch" style="--span:12;--xl:4"><div class="panel-head"><h2>Shots per match</h2><p class="sub">Taken by us. Hover for shots conceded.</p></div><div class="chart" id="st-shots"></div></section>
+          <section class="panel stretch" style="--span:6;--xl:4"><div class="panel-head"><h2>Expected goals trend</h2><p class="sub">Per match; dashed lines are three-match averages</p></div><div class="chart" id="st-xg"></div></section>
+          <section class="panel stretch" style="--span:12;--xl:4"><div class="panel-head"><h2>Shots per match</h2><p class="sub">Our shots per match</p></div><div class="chart" id="st-shots"></div></section>
         </div>
         <div class="board-bar" ${ts.length ? '' : 'hidden'}><h2>Leaderboards</h2><div class="seg" role="group" aria-label="Stat basis">
           <button type="button" data-basis="tot" aria-pressed="${!per90}">Season totals</button><button type="button" data-basis="p90" aria-pressed="${per90}">Per 90 minutes</button></div></div>
@@ -53,7 +53,7 @@
     after(root) {
       const U = FC.u;
       const ts = FC.stats.teamSeries();
-      if (!ts.length) { root.querySelectorAll('.chart').forEach((c) => { c.innerHTML = '<p class="empty-note">Charts fill in once matches are captured.</p>'; }); }
+      if (!ts.length) { root.querySelectorAll('.chart').forEach((c) => { c.innerHTML = '<p class="empty-note">No matches played.</p>'; }); }
       const labels = ts.map((x) => x.label);
       const tip = (i) => `${U.esc(U.team(U.opponent(ts[i].f)).name)} (${ts[i].f.venue}) ${ts[i].gf}–${ts[i].ga}`;
       const scorers = FC.stats.totals().filter((t) => t.goals > 0).sort((a, b) => b.goals - a.goals).slice(0, 4);

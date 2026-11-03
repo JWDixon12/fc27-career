@@ -40,32 +40,33 @@
       ['Corners', s.corners], ['Free kicks', s.freeKicks], ['Penalties', s.penalties], ['Yellow cards', s.yellows, null, true], ['Red cards', s.reds, null, true],
       ['Line breaks through', s.lineBreaksThrough], ['Line breaks around', s.lineBreaksAround], ['Line breaks over', s.lineBreaksOver], ['Line breaks attempted', s.lineBreaksAttempted],
     ].filter((r) => Array.isArray(r[1]));
-    const names = [FC.u.team(f.home).short, FC.u.team(f.away).short];
-    return FC.chart.statStrip(m, names) + FC.chart.compareFold(rows.slice(2).map(([label, values, fmt, lowerBetter]) => ({ label, values, fmt: fmt || undefined, lowerBetter })), 8);
+    const order = ['Possession', 'Shots', 'On target', 'Expected goals', 'Passes', 'Tackles'];
+    const sorted = [...order.map((l) => rows.find((r) => r[0] === l)).filter(Boolean), ...rows.filter((r) => !order.includes(r[0]))];
+    return FC.chart.compareFold(sorted.map(([label, values, fmt, lowerBetter]) => ({ label: label === 'Expected goals' ? 'xG' : label, values, fmt: fmt || undefined, lowerBetter })), 6);
   }
 
   FC.views.match = {
     render(arg) {
       const U = FC.u;
       const list = FC.stats.captured({ extras: true });
-      if (!list.length) return '<header class="page-head"><h1>Match Centre</h1></header><p class="empty-note">No captured matches yet. Post-match screens are added after each game.</p>';
+      if (!list.length) return '<header class="page-head"><h1>Match Centre</h1></header><p class="empty-note">No matches captured yet.</p>';
       const cur = list.find((x) => x.f.id === arg) || list[list.length - 1];
       const { f, m } = cur;
       if (m.facts) {
         return `<div class="mc mc-rich" style="--L:${m.sides.home.color};--R:${m.sides.away.color}">
-          <header class="page-head"><div><h1>Match Centre</h1><p>${list.length} captured matches. Built from the post-match screens.</p></div></header>
+          <header class="page-head"><div><h1>Match Centre</h1><p>${m.realCapture ? 'Transcribed from the in-game match facts.' : ''} Maps attack upward. Shot size is xG.</p></div></header>
           ${picker(list, f.id)}${FC.matchRich.render(f, m)}</div>`;
       }
       const L = colorOf(f.home), R = colorOf(f.away);
       const P = FC.matchParts;
       return `<div class="mc" style="--L:${L};--R:${R}">
-        <header class="page-head"><div><h1>Match Centre</h1><p>${list.length} captured matches. Built from the post-match screens.</p></div></header>
+        <header class="page-head"><div><h1>Match Centre</h1><p>Maps attack upward. Shot size is xG; thicker pass lines mean more passes.</p></div></header>
         ${picker(list, f.id)}
         ${scoreboard(f, m)}
         <div class="g12 mc-grid">
           <div class="stack mc-stack" style="--span:6">
-            <section class="panel mc-threat"><div class="panel-head"><h2>Threat</h2><p class="sub">Attacking threat per two minutes. ${U.esc(U.team(f.home).short)} up, ${U.esc(U.team(f.away).short)} down; gold = goal.</p></div><div class="chart" id="mc-mo"></div></section>
-            <section class="panel mc-xg"><div class="panel-head"><h2>Expected goals race</h2><p class="sub">Each step is a shot; big dots are goals.</p></div><div class="chart" id="mc-xg"></div></section>
+            <section class="panel mc-threat"><div class="panel-head"><h2>Threat</h2><p class="sub">Threat per two minutes. ${U.esc(U.team(f.home).short)} up, ${U.esc(U.team(f.away).short)} down; gold = goal.</p></div><div class="chart" id="mc-mo"></div></section>
+            <section class="panel mc-xg"><div class="panel-head"><h2>Expected goals race</h2><p class="sub">Cumulative. Large dots are goals.</p></div><div class="chart" id="mc-xg"></div></section>
             <section class="panel mc-shot">${P.shotMap(f, m)}</section>
           </div>
           <section class="panel mc-ev" style="--span:6">${P.timeline(f, m)}</section>

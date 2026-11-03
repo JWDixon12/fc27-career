@@ -1,38 +1,37 @@
-/* Tokens, reset, type. Direction: "Theatre of Dreams" night match. Floodlit charcoal stands,
-   United red as the home colour, gold only for honours/captaincy/MOTM. */
+/* Tokens, reset, type. Direction: Swiss matchday programme. Flat, printed, red as signal. */
 :root {
   color-scheme: dark;
-  /* surfaces: night sky -> stand -> tier */
-  --night: #0c0d10;
-  --stand: #15171c;
-  --tier: #1d2027;
-  --tier-2: #262a33;
-  --rule: rgba(236, 231, 223, 0.09);
-  --rule-2: rgba(236, 231, 223, 0.16);
-  /* ink */
-  --chalk: #ece7df;
-  --ash: #b4afa6;
-  --mute: #858179;
-  /* club */
+  /* "Swiss matchday programme": flat surfaces, hairlines, red as the only chrome accent */
+  --night: #0e0e0f;          /* page */
+  --stand: #171718;          /* surface: hero + player cards only */
+  --tier: #1c1c1e;
+  --tier-2: #232325;
+  --rule: #2a2a2c;           /* hairline */
+  --rule-2: #3a3a3d;
+  --chalk: #f2efe9;          /* text */
+  --ash: #c2bfb9;
+  --mute: #9a9792;
   --red: #da291c;
   --red-deep: #8f150c;
-  --gold: #fbe122;
-  /* data roles (validated with the dataviz script on the --stand surface) */
-  --home: #e0372a;
-  --away: #4f9bd9;
-  --c-league: #9085e9;
-  --c-europe: #199e70;
-  --c-cup: #c98500;
-  --good: #0ca30c;
-  --warn: #fab219;
-  --serious: #ec835a;
-  --crit: #d03b3b;
-  --grid: #2a2d35;
-  --axis: #3a3e48;
-  /* turf */
-  --turf: #10231a;
-  --turf-stripe: #13291f;
-  --turf-line: rgba(236, 231, 223, 0.32);
+  --gold: #d4af37;           /* honours only */
+  --home: #da291c;
+  --away: #4f9bd9;           /* stat bars only */
+  --c-league: #da291c;
+  --c-europe: #f2efe9;
+  --c-cup: #9a9792;
+  --good: #3ecf8e;
+  --pos: #3ecf8e;
+  --neg: #e5484d;
+  --warn: #d4af37;
+  --serious: #e5484d;
+  --crit: #e5484d;
+  --grid: #222224;
+  --axis: #2a2a2c;
+  --turf: #141716;
+  --turf-stripe: #161a18;
+  --turf-line: rgba(242, 239, 233, 0.22);
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 40px;
+  --r-chip: 4px; --r-card: 12px;
 
   --f-display: 'Big Shoulders Display', 'Arial Narrow', Impact, sans-serif;
   --f-text: 'Archivo', 'Segoe UI', system-ui, sans-serif;
@@ -48,7 +47,7 @@
   --gutter: clamp(16px, 2.2vw, 56px);
   --gap: clamp(14px, 1.2vw, 28px);
   --r-sm: 4px;
-  --r-md: 8px;
+  --r-md: 12px;
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -64,28 +63,17 @@ html { -webkit-text-size-adjust: 100%; scroll-padding-top: 120px; }
 body {
   margin: 0;
   min-height: 100vh;
-  background:
-    radial-gradient(1200px 520px at 12% -120px, rgba(255, 244, 214, 0.07), transparent 70%),
-    radial-gradient(1200px 520px at 88% -120px, rgba(255, 244, 214, 0.06), transparent 70%),
-    var(--night);
+  background: var(--night);
   color: var(--chalk);
   font-family: var(--f-text);
-  font-size: var(--step-0);
-  line-height: 1.5;
-  font-variation-settings: 'wdth' 92;
-  overflow-x: hidden;
+  font-size: 15px;
+  line-height: 1.45;
+  font-variant-numeric: tabular-nums;
+  font-variation-settings: 'wdth' 100;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* film grain over everything, very faint */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 100;
-  opacity: 0.05;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
 
 h1, h2, h3, h4 { margin: 0; font-family: var(--f-display); font-weight: 800; line-height: 0.95; letter-spacing: 0.005em; }
 h1 { font-size: var(--step-4); }

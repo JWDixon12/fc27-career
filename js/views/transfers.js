@@ -36,11 +36,11 @@
             <div><div class="panel-head"><h2>Arrivals</h2><p class="sub">${ins.length} in</p></div><ol class="deals">${ins.map(deal).join('') || '<li class="empty-note">No arrivals yet.</li>'}</ol></div>
             <div><div class="panel-head"><h2>Departures</h2><p class="sub">${outs.length} out, loans included</p></div><ol class="deals">${outs.map(deal).join('') || '<li class="empty-note">No departures yet.</li>'}</ol></div></div></section>
           <div class="stack tr-side" style="--span:4;--xl:3">
-            <section class="panel tr-net"><div class="panel-head"><h2>Net spend</h2><p class="sub">Running total across the window</p></div><div class="chart" id="tr-net"></div></section>
+            <section class="panel tr-net"><div class="panel-head"><h2>Net spend</h2><p class="sub">Cumulative</p></div><div class="chart" id="tr-net"></div></section>
             <section class="panel tr-short"><div class="panel-head"><h2>Shortlist</h2><p class="sub">Scouted targets</p></div>
             ${T.shortlist.length ? `<ul class="shortlist">${T.shortlist.map((s) => `<li><header>${U.crest(s.club, 28)}<div><b>${U.esc(s.name)}</b><small>${U.esc(U.teamName(s.club))}</small></div><span class="sl-ovr">${s.ovr}<small>${U.esc(s.pos)}</small></span></header>
               <p class="sl-meta">${s.age} yrs · ${U.money(s.value)} · contract to ${s.contractEnd}</p>${s.note ? `<p class="sl-note">${U.esc(s.note)}</p>` : ''}</li>`).join('')}</ul>` : '<p class="empty-note">No targets shortlisted.</p>'}</section></div>
-          <section class="panel tr-world" style="--span:12"><div class="panel-head"><h2>Around the world</h2><p class="sub">Other clubs' business, newest first</p></div>
+          <section class="panel tr-world" style="--span:12"><div class="panel-head"><h2>Around the world</h2><p class="sub">Newest first</p></div>
             ${T.world.length ? `<div class="table-wrap"><table class="data world-table"><thead><tr><th>Date</th><th>Player</th><th>From</th><th>To</th><th class="n">Fee</th></tr></thead><tbody>
             ${[...T.world].sort((a, b) => b.date.localeCompare(a.date)).map((w) => `<tr><td>${U.date(w.date, 'short')}</td><td><b>${U.esc(w.playerName)}</b></td><td>${clubCell(w.fromTeam)}</td><td>${clubCell(w.toTeam)}</td><td class="n">${w.fee ? U.money(w.fee) : 'Free'}</td></tr>`).join('')}
             </tbody></table></div>` : '<p class="empty-note">No other transfers recorded yet.</p>'}</section>

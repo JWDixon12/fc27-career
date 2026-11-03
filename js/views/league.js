@@ -36,7 +36,7 @@
     const U = FC.u;
     const list = D().fixtures.filter((f) => f.comp === compId);
     if (!list.length) return '';
-    return `<section class="panel cup"><div class="panel-head"><h2>${U.esc(U.comp(compId).name)}</h2><p class="sub">Our path</p></div>
+    return `<section class="panel cup"><div class="panel-head"><h2>${U.esc(U.comp(compId).name)}</h2><p class="sub"></p></div>
       <ol class="cup-path">${list.map((f) => {
         const r = U.result(f);
         const has = !!D().matches[f.id];
@@ -60,13 +60,13 @@
       return `<header class="page-head"><div><h1>${U.esc(league ? league.name : 'League')}</h1><p>${md ? `After matchday ${md}.` : 'Season not started.'} Top four qualify for the Champions League, fifth for the Europa League, bottom three go down.</p></div></header>
         ${md ? '' : `<div class="g12">
           <section class="panel" style="--span:7;--xl:6">${table(league.id, rows)}</section>
-          <div class="stack fill lg-pre-side" style="--span:5;--xl:6">${U.ghostCard('Position by matchday', 'Every club’s climb and fall is plotted from matchday 1.')}${otherTables}${cups}</div></div>`}
+          <div class="stack fill lg-pre-side" style="--span:5;--xl:6">${U.ghostCard('Position by matchday', 'Plotted from matchday 1.')}${otherTables}${cups}</div></div>`}
         <div class="g12 lg-grid" ${md ? '' : 'hidden'}>
           <div class="stack lg-main" style="--span:7"><section class="panel lg-table">${table(league.id, rows)}
             <p class="legend zone-key"><span><i class="sw" style="--c:var(--c-europe)"></i>Champions League</span><span><i class="sw" style="--c:var(--away)"></i>Europa League</span><span><i class="sw" style="--c:var(--crit)"></i>Relegation</span></p></section>
             <div class="stack lg-cups">${cups}</div></div>
           <div class="stack ${md ? 'fill' : ''} lg-side" style="--span:5">
-            <section class="panel grow lg-bump-p"><div class="panel-head"><h2>Position by matchday</h2><p class="sub">Hover a line to follow a club</p></div><div class="chart" id="lg-bump"></div></section>
+            <section class="panel grow lg-bump-p"><div class="panel-head"><h2>Position by matchday</h2><p class="sub"></p></div><div class="chart" id="lg-bump"></div></section>
             <div class="stack lg-other">${otherTables}</div></div>
         </div>`;
     },

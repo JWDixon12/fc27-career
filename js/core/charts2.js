@@ -81,16 +81,27 @@
   }
 
   /** Game-style stat comparison rows: home value | label | away value, with split bar. */
+  /** Mirrored rows: value | label | value over a 6px track. Each side's bar grows from the centre;
+      the leader's half is coloured (home red, away blue), the other stays grey. */
   function compare(rows) {
     return `<div class="compare">${rows.map((r) => {
-      const [a, b] = r.values;
-      const tot = (a || 0) + (b || 0) || 1;
+      const [a, b] = r.values.map((v) => v || 0);
       const lead = r.lowerBetter ? (a < b ? 0 : a > b ? 1 : -1) : a > b ? 0 : a < b ? 1 : -1;
-      const fa = r.fmt ? r.fmt(a) : a, fb = r.fmt ? r.fmt(b) : b;
-      return `<div class="cmp-row" tabindex="0" data-tip="${esc(`<strong>${esc(r.label)}</strong>${esc(fa)} – ${esc(fb)}`)}">
+      const max = Math.max(a, b) || 1;
+      const fa = r.fmt ? r.fmt(r.values[0]) : r.values[0], fb = r.fmt ? r.fmt(r.values[1]) : r.values[1];
+      return `<div class="cmp-row">
         <span class="cmp-v ${lead === 0 ? 'lead' : ''}">${esc(fa)}</span><span class="cmp-l">${esc(r.label)}</span><span class="cmp-v ${lead === 1 ? 'lead' : ''}">${esc(fb)}</span>
-        <span class="cmp-bar">${(a || 0) + (b || 0) === 0 ? '<i class="z"></i>' : `${a ? `<i class="h" style="flex:${a}"></i>` : ''}${b ? `<i class="a" style="flex:${b}"></i>` : ''}`}</span></div>`;
+        <span class="cmp-track" aria-hidden="true"><span class="ct-h"><i class="${lead === 0 ? 'on' : ''}" style="width:${(100 * a) / max}%"></i></span><span class="ct-a"><i class="${lead === 1 ? 'on' : ''}" style="width:${(100 * b) / max}%"></i></span></span></div>`;
     }).join('')}</div>`;
+  }
+
+  /** Single horizontal meter 0..100 with status as coloured text (replaces the old arc gauge). */
+  function meter(value, label, note) {
+    const status = value >= 65 ? 'good' : value >= 40 ? 'neutral' : 'crit';
+    const word = { good: 'Positive', neutral: 'Neutral', crit: 'Negative' }[status];
+    return `<div class="meter-row" role="meter" aria-valuenow="${value}" aria-valuemin="0" aria-valuemax="100" aria-label="${esc(label)}">
+      <span class="mr-l">${esc(label)}${note ? `<small>${esc(note)}</small>` : ''}</span><b>${value}</b><span class="status-tag s-${status}">${word}</span>
+      <span class="mr-track"><i style="width:${value}%"></i></span></div>`;
   }
 
   /** Arc gauge 0..100 with a status band colour. */
@@ -125,5 +136,5 @@
     return `${compare(rows.slice(0, keep))}<details class="more-stats"><summary>All stats <span>${rows.length - keep} more</span></summary>${compare(rows.slice(keep))}</details>`;
   }
 
-  FC.chart = Object.assign(FC.chart || {}, { bump, momentum, xgRace, compare, compareFold, statStrip, gauge });
+  FC.chart = Object.assign(FC.chart || {}, { bump, momentum, xgRace, compare, compareFold, statStrip, gauge, meter });
 })();

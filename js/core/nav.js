@@ -10,7 +10,7 @@
     match: '<circle cx="12" cy="12" r="8.5"/><path d="m12 7.6 3.6 2.6-1.4 4.2H9.8l-1.4-4.2z"/><path d="M12 3.5v4.1M20.1 9.4l-4.5.8M17.2 19.4l-3-5M6.8 19.4l3-5M3.9 9.4l4.5.8"/>',
     more: '<circle cx="6" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="18" cy="12" r="1.6"/>',
     stats: '<path d="M5 20V11M10 20V5M15 20v-7M20 20V8"/>',
-    league: '<path d="M7 4h10v4.5a5 5 0 0 1-10 0z"/><path d="M7 6H4.5a2.5 2.5 0 0 0 2.6 3.3M17 6h2.5a2.5 2.5 0 0 1-2.6 3.3M12 13.5V17M8.5 20.5h7l-1-3.5h-5z"/>',
+    league: '<rect x="4" y="4.5" width="16" height="15" rx="1.5"/><path d="M4 9.5h16M4 14.5h16M9 4.5v15"/>',
     transfers: '<path d="M4 8h13l-3.5-3.5M20 16H7l3.5 3.5"/>',
     finances: '<rect x="3.5" y="6" width="17" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/><path d="M7 9.5v5M17 9.5v5"/>',
     youth: '<path d="M12 20v-8M12 12c0-4 2.5-6.5 7-7-.3 4.6-2.8 7-7 7zM12 14c0-3-2-5-5.5-5.5.2 3.6 2.3 5.5 5.5 5.5z"/>',

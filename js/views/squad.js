@@ -120,7 +120,7 @@
   function body() {
     const list = filtered();
     if (state.view === 'depth') return depth();
-    if (!list.length) return '<p class="empty-note">No players match. Clear the search or pick another group.</p>';
+    if (!list.length) return '<p class="empty-note">No players match this search.</p>';
     return state.view === 'cards' ? cards(list) : table(list);
   }
 
@@ -138,7 +138,8 @@
           <input class="field" type="search" id="sq-q" placeholder="Search name, nation or position" value="${U.esc(state.q)}" aria-label="Search squad">
           <div class="seg" role="group" aria-label="Position group">${groups.map(([k, l]) => `<button type="button" data-group="${k}" aria-pressed="${state.group === k}">${l}</button>`).join('')}</div>
           <div class="seg" role="group" aria-label="Layout">${[['table', 'Table'], ['cards', 'Cards'], ['depth', 'Depth chart']].map(([k, l]) => `<button type="button" data-view="${k}" aria-pressed="${state.view === k}">${l}</button>`).join('')}</div>
-        </div><div id="sq-body">${body()}</div></section>`;
+        </div><div id="sq-body">${body()}</div></section>
+        <div class="sq-extra">${FC.homePre.contracts()}${FC.homePre.clubRecord()}</div>`;
     },
     after(root) {
       const redraw = () => { root.querySelector('#sq-body').innerHTML = body(); };
