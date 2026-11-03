@@ -1,0 +1,1 @@
+(window.CLUBS = window.CLUBS || {})[131140] = {"id":131140,"name":"*TeamName_Abbr15_132169","ratings":{"ovr":0,"att":0,"mid":0,"def":0},"capacity":0,"clubWorth":0,"prestige":{"domestic":5,"international":5},"honours":{"league":0,"domesticCups":0,"europeanCups":0},"rival":1318,"crest":null,"squad":[],"fixtures":[]};
