@@ -305,3 +305,15 @@
   .yo-scouts { grid-auto-flow: row; grid-template-columns: repeat(3, minmax(0, 1fr)); overflow: visible; }
   .yo-grid { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); align-items: start; }
 }
+.yo-record { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 14px 0 0; padding-top: 12px; border-top: 1px solid var(--rule); }
+.yo-record dt { color: var(--mute); font-size: 0.7rem; }
+.yo-record dd { margin: 0; font-family: 'Big Shoulders Display', sans-serif; font-weight: 800; font-size: 1.4rem; }
+.yo-finds { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 4px; }
+.yo-finds li { display: flex; justify-content: space-between; gap: 8px; font-size: 0.8rem; color: var(--ash); }
+.yo-finds li[data-player] { cursor: pointer; }
+.yo-finds em { font-style: normal; font-size: 0.7rem; color: var(--mute); white-space: nowrap; }
+.yo-finds .st-promoted span, .yo-finds .st-debut span { color: var(--chalk); font-weight: 700; }
+.yo-finds .st-promoted em { color: var(--good); }
+.yo-finds .st-debut em { color: var(--gold); }
+.yo-found { color: var(--mute); }
+.pl-flag.scout { background: rgba(212, 175, 55, 0.12); color: var(--gold); }

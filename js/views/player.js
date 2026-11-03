@@ -35,6 +35,8 @@
       const status = p.status === 'injured' && p.injury ? `<span class="pl-flag inj">${U.esc(p.injury.type)} · back ${U.date(p.injury.returnDate)}</span>`
         : p.status === 'loaned_out' && p.loan ? `<span class="pl-flag loan">On loan at ${U.esc(p.loan.club)} until ${U.date(p.loan.until)}</span>`
           : p.status === 'suspended' ? '<span class="pl-flag sus">Suspended</span>' : '<span class="pl-flag fit">Available</span>';
+      const find = ((window.CAREER.youth || {}).finds || {})[String(p.id)];
+      const scouted = find ? `<span class="pl-flag scout">Academy · found by ${U.esc(find.scout)}</span>` : '';
       const gd = U.parseDate(D().meta.gameDate);
       const seasonsLeft = p.contractEnd - (gd.getMonth() >= 6 ? gd.getFullYear() + 1 : gd.getFullYear()) + 1;
       return `<article class="pp">
@@ -44,7 +46,7 @@
           <div class="pp-id"><p class="pp-pos"><span class="pos-tag pg-${U.posGroup(p.pos)}">${p.pos}</span> ${p.altPos.map((x) => `<span class="pos-tag">${x}</span>`).join(' ')}</p>
             <h2>${U.esc(p.name)}</h2>
             <p class="pp-sub">${U.flag(p)}<span>${U.esc(p.nat)} · ${p.age} years old${p.shirt ? ` · #${p.shirt}` : ''}${p.captain ? ' · <b class="gold">Captain</b>' : ''}${p.homegrown ? ' · Academy graduate' : ''}</span></p>
-            ${status}</div>
+            ${status}${scouted}</div>
           <div class="pp-ovr"><b>${p.ovr}</b><small>Overall</small>${delta ? `<span class="${delta > 0 ? 'up' : 'down'}">${delta > 0 ? '▲' : '▼'} ${Math.abs(delta)} since ${U.date(hist[0].date, 'short')}</span>` : ''}</div>
         </header>
         <div class="pp-grid">${FC.attrs ? FC.attrs.block(p, D().squad, 'Squad') : ''}${FC.history ? `<div class="hy-slot">${FC.history.block(p)}</div>` : ''}
