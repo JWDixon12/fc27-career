@@ -13,7 +13,7 @@
       const grads = D().squad.filter((p) => p.homegrown).sort((a, b) => b.ovr - a.ovr);
       const prospects = [...Y.prospects].sort((a, b) => b.ovr - a.ovr);
       const ages = prospects.map((p) => p.age);
-      return `<header class="page-head"><div><h1>Youth Academy</h1><p>${Y.scouts.length} scouts on the road · ${prospects.length} prospects in the youth squad · ${grads.length} academy products on the books</p></div></header>
+      return `<header class="page-head"><div><h1>Youth Academy</h1><p>${Y.scouts.length} scout${Y.scouts.length === 1 ? '' : 's'} on the road · ${prospects.length} prospect${prospects.length === 1 ? '' : 's'} in the youth squad · ${grads.length} academy product${grads.length === 1 ? '' : 's'} on the books</p></div></header>
         <div class="g12">
           <div class="stack yo-scouts" style="--span:4">${Y.scouts.length ? '' : '<section class="panel"><h2>Scouts</h2><p class="empty-note">No scouts hired.</p></section>'}${Y.scouts.map((s) => `<section class="panel scout"><span class="scout-pin" aria-hidden="true"></span>
             <h2>${U.esc(s.name)}</h2><p class="scout-region">${U.esc(s.region)}</p>

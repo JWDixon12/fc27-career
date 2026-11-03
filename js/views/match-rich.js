@@ -88,12 +88,28 @@
     const U = FC.u;
     const shots = m.shots.map((s) => `<tr><td><span class="side-dot" style="--c:var(--${s.side === 'home' ? 'L' : 'R'})"></span>${esc(m.sides[s.side].short)}</td><td>${s.minute != null ? `${s.minute}'` : '<span class="muted" title="Minute not shown on the shot map">—</span>'}</td>
       <td><b>${esc(s.player)}</b></td><td>${esc(s.type || '')}</td><td class="n">${s.xg.toFixed(2)}</td><td>${esc({ goal: 'Goal', saved: 'Saved', off: 'Off target', blocked: 'Blocked' }[s.outcome] || s.outcome)}</td></tr>`).join('');
-    return `<div class="gm-events"><ol class="events">${m.events.map((e) => {
-      const left = e.side === 'home';
-      return `<li class="ev ${left ? 'l' : 'r'} ev-${esc(e.type)}"><div class="ev-body">${/goal/.test(e.type) ? '<svg viewBox="0 0 16 16" class="ev-i ev-goal" aria-hidden="true"><circle cx="8" cy="8" r="6.5"/><path d="M8 4.6l2.6 1.9-1 3.1H6.4l-1-3.1z"/></svg>' : ''}
-        <div><span class="ev-name">${esc(e.player)}</span>${e.assist ? `<small>Assist ${esc(e.assist)}</small>` : ''}</div></div><span class="ev-min">${e.minute}'</span></li>`;
-    }).join('')}<li class="ev ft"><span class="ev-min">${m.minutesPlayed < 90 ? esc(m.clock.split(':')[0]) + "'" : 'FT'}</span></li></ol>
-      <div class="table-wrap"><table class="data"><caption class="visually-hidden">Shots</caption><thead><tr><th>Team</th><th>Min</th><th>Player</th><th>Type</th><th class="n">xG</th><th>Result</th></tr></thead><tbody>${shots}</tbody></table></div></div>`;
+    const GOAL = '<svg viewBox="0 0 16 16" class="ev-i ev-goal" aria-hidden="true"><circle cx="8" cy="8" r="6.5"/><path d="M8 4.6l2.6 1.9-1 3.1H6.4l-1-3.1z"/></svg>';
+    const icon = (e) => {
+      if (/goal/.test(e.type)) return GOAL;
+      if (e.type === 'yellow') return '<span class="ev-card y" aria-label="Yellow card"></span>';
+      if (e.type === 'red' || e.type === 'second_yellow') return `<span class="ev-card r${e.type === 'second_yellow' ? ' y2' : ''}" aria-label="Red card"></span>`;
+      if (e.type === 'sub') return '<span class="ev-subicon" aria-label="Substitution"><b>&#9650;</b><b>&#9660;</b></span>';
+      return '';
+    };
+    const label = (e) => {
+      if (e.type === 'sub') return `<span class="ev-name">${esc(e.player)}</span><small class="ev-out">${esc(e.playerOut || '')}</small>`;
+      const what = { yellow: 'Yellow card', red: 'Red card', second_yellow: 'Second yellow', own_goal: 'Own goal', pen_goal: 'Penalty' }[e.type];
+      const sub = e.assist ? `Assist ${esc(e.assist)}` : what ? what : '';
+      return `<span class="ev-name">${esc(e.player)}</span>${sub ? `<small>${sub}</small>` : ''}`;
+    };
+    const half = m.events.findIndex((e) => e.minute > 45);
+    const rows = m.events.map((e, i) => {
+      const ht = i === half ? '<li class="ev ft ht"><span class="ev-min">HT</span></li>' : '';
+      return `${ht}<li class="ev ${e.side === 'home' ? 'l' : 'r'} ev-${esc(e.type)}"><div class="ev-body">${icon(e)}<div>${label(e)}</div></div><span class="ev-min">${e.minute}'</span></li>`;
+    }).join('');
+    const end = `<li class="ev ft"><span class="ev-min">${m.minutesPlayed < 90 ? esc(m.clock.split(':')[0]) + "'" : 'FT'}</span></li>`;
+    const shotTable = m.shots.length ? `<div class="table-wrap"><table class="data"><caption class="visually-hidden">Shots</caption><thead><tr><th>Team</th><th>Min</th><th>Player</th><th>Type</th><th class="n">xG</th><th>Result</th></tr></thead><tbody>${shots}</tbody></table></div>` : '';
+    return `<div class="gm-events"><ol class="events">${rows}${half < 0 ? '<li class="ev ft ht"><span class="ev-min">HT</span></li>' : ''}${end}</ol>${shotTable}</div>`;
   }
 
   function body(f, m) {

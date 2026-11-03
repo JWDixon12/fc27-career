@@ -147,3 +147,9 @@
   .mc-ev { align-self: stretch; display: flex; flex-direction: column; }
   .mc-ev .events { flex: 1 1 auto; display: flex; flex-direction: column; justify-content: space-around; }
 }
+/* event rows: cards + subs (MD1 fix) */
+.ev-card.y2 { background: linear-gradient(135deg, var(--gold) 0 50%, var(--crit) 50% 100%); }
+.ev-out { color: var(--mute); }
+.ev-yellow .ev-min { border-color: var(--rule-2); }
+.ev-red .ev-min, .ev-second_yellow .ev-min { border-color: var(--crit); color: var(--crit); }
+.ev.ht .ev-min { font-size: 0.8rem; color: var(--mute); }
