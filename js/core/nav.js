@@ -16,10 +16,11 @@
     youth: '<path d="M12 20v-8M12 12c0-4 2.5-6.5 7-7-.3 4.6-2.8 7-7 7zM12 14c0-3-2-5-5.5-5.5.2 3.6 2.3 5.5 5.5 5.5z"/>',
     leagues: '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.5 2.4 3.6 5.3 3.6 8.5s-1.1 6.1-3.6 8.5c-2.5-2.4-3.6-5.3-3.6-8.5S9.5 5.9 12 3.5z"/>',
     search: '<circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/>',
+    news: '<rect x="3.5" y="5" width="14" height="14.5" rx="1.5"/><path d="M17.5 9h3v9a1.5 1.5 0 0 1-3 0M7 9h7M7 12.5h7M7 16h4.5"/>',
     room: '<path d="M4.5 6.5h15v9h-8l-4.5 4v-4h-2.5z"/>',
   };
   const MAIN = [['home', 'Home'], ['calendar', 'Fixtures'], ['squad', 'Squad'], ['match', 'Match']];
-  const MORE = [['leagues', 'Leagues'], ['search', 'Search'], ['stats', 'Stats'], ['league', 'League'], ['transfers', 'Transfers'], ['finances', 'Financials'], ['youth', 'Youth'], ['room', 'The Room']];
+  const MORE = [['news', 'News'], ['leagues', 'Leagues'], ['search', 'Search'], ['stats', 'Stats'], ['league', 'League'], ['transfers', 'Transfers'], ['finances', 'Financials'], ['youth', 'Youth'], ['room', 'The Room']];
   const icon = (k) => `<svg viewBox="0 0 24 24" aria-hidden="true">${I[k]}</svg>`;
 
   function mount() {
@@ -34,7 +35,7 @@
     sheet.hidden = true;
     sheet.innerHTML = `<div class="bsheet-scrim" data-bclose></div><div class="bsheet-panel" role="dialog" aria-label="More sections">
       <span class="bsheet-grip" aria-hidden="true"></span>
-      <div class="bsheet-grid">${MORE.map(([k, l]) => `<a href="#${k}" data-bmore="${k}">${icon(k)}<span>${l}</span></a>`).join('')}</div></div>`;
+      <div class="bsheet-grid">${MORE.filter(([k]) => k !== 'news' || ((window.CAREER || {}).news || []).length).map(([k, l]) => `<a href="#${k}" data-bmore="${k}">${icon(k)}<span>${l}</span></a>`).join('')}</div></div>`;
     document.body.append(nav, sheet);
     nav.querySelector('[data-bnav=more]').addEventListener('click', () => (sheet.hidden ? open() : close()));
     sheet.addEventListener('click', (e) => { if (e.target.closest('[data-bclose],[data-bmore]')) close(); });

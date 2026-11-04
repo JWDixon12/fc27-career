@@ -61,7 +61,7 @@
 .hero-face > .hero-mid { grid-area: mid; }
 .hero-side { display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; min-width: 0; }
 .hero-side .hero-crest, .hero-side .crest-fb { width: clamp(84px, 7.5vw, 180px); height: clamp(84px, 7.5vw, 180px); filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.7)); }
-.hero-side.is-us .hero-crest { filter: drop-shadow(0 0 40px rgba(218, 41, 28, 0.55)) drop-shadow(0 18px 30px rgba(0, 0, 0, 0.7)); }
+.hero-side.is-us .hero-crest { filter: drop-shadow(0 0 40px rgba(var(--accent-rgb), 0.55)) drop-shadow(0 18px 30px rgba(0, 0, 0, 0.7)); }
 .hero-side .hero-name { display: flex; align-items: center; justify-content: center; min-height: 1.84em; font-size: clamp(1.6rem, 1rem + 1.5vw, 3rem); font-weight: 900; text-transform: uppercase; line-height: 0.92; }
 .hero-mid { display: flex; flex-direction: column; align-items: center; gap: 12px; }
 .hero-vs { font-family: var(--f-display); font-weight: 900; font-size: var(--step-3); color: var(--mute); line-height: 0.6; }
@@ -98,10 +98,10 @@
   color: #fff;
   font-weight: 700;
   text-decoration: none;
-  box-shadow: 0 8px 24px -8px rgba(218, 41, 28, 0.7);
+  box-shadow: 0 8px 24px -8px rgba(var(--accent-rgb), 0.7);
   transition: transform 0.15s, box-shadow 0.15s;
 }
-.btn-red:hover { transform: translateY(-1px); box-shadow: 0 12px 28px -8px rgba(218, 41, 28, 0.9); }
+.btn-red:hover { transform: translateY(-1px); box-shadow: 0 12px 28px -8px rgba(var(--accent-rgb), 0.9); }
 
 .last-res { border-top: 3px solid var(--mute); }
 .res-edge-W { border-top-color: var(--good); }

@@ -138,7 +138,7 @@
 .mast-pill { border-color: var(--line); }
 
 /* table: us highlighted with a club-red stripe */
-table.data tr.us td { background: rgba(218, 41, 28, 0.16); }
+table.data tr.us td { background: rgba(var(--accent-rgb), 0.16); }
 .mini-table { background: var(--raised); border-radius: 10px; overflow: hidden; }
 
 .tf-opp b, .cu-row b { white-space: normal; overflow: visible; text-overflow: clip; line-height: 1.2; }

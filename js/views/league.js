@@ -4,11 +4,18 @@
   const FC = (window.FC = window.FC || {});
   const D = () => window.CAREER;
 
-  /** comp.zones: { cl, el, playoff, rel } counts from the top / bottom of the table. */
-  const zonesOf = (comp) => ({ cl: 4, el: 1, playoff: 0, rel: 3, ...(comp.zones || {}) });
+  /** comp.zones: top flight { cl, el, playoff, rel }; second tier { promo, playoff, rel } (play-off places
+      sit directly under the automatic promotion places). Counts from the top / bottom of the table. */
+  const zonesOf = (comp) => ((comp.zones || {}).promo != null ? { promo: 0, playoff: 0, rel: 3, ...comp.zones }
+    : { cl: 4, el: 1, playoff: 0, rel: 3, ...(comp.zones || {}) });
   function zone(i, n, comp) {
     if (comp.type !== 'league') return '';
     const z = zonesOf(comp);
+    if (z.promo != null) {
+      if (i < z.promo) return 'z-ucl';
+      if (i < z.promo + z.playoff) return 'z-po';
+      return i >= n - z.rel ? 'z-rel' : '';
+    }
     if (i < z.cl) return 'z-ucl';
     if (i < z.cl + z.el) return 'z-uel';
     if (i >= n - z.rel) return 'z-rel';
@@ -55,6 +62,9 @@
   function zoneText(comp) {
     const z = zonesOf(comp || {});
     const word = (n) => ['', 'one', 'two', 'three', 'four', 'five', 'six'][n] || String(n);
+    if (z.promo != null) {
+      return `The top ${word(z.promo)} go up automatically and the next ${word(z.playoff)} contest the play-offs for the last place. The bottom ${word(z.rel)} are relegated.`;
+    }
     return `Top ${word(z.cl)} qualify for the Champions League, ${z.el === 1 ? 'the next' : `the next ${word(z.el)}`} for the Europa League.`
       + `${z.playoff ? ` ${z.playoff === 1 ? 'One club plays' : `${word(z.playoff)} clubs play`} a relegation play-off;` : ''} the bottom ${word(z.rel)} go down.`;
   }
@@ -76,7 +86,7 @@
           <div class="stack fill lg-pre-side" style="--span:5;--xl:6">${U.ghostCard('Position by matchday', 'Plotted from matchday 1.')}${otherTables}${cups}</div></div>`}
         <div class="g12 lg-grid" ${md ? '' : 'hidden'}>
           <div class="stack lg-main" style="--span:7"><section class="panel lg-table">${table(league.id, rows)}
-            <p class="legend zone-key"><span><i class="sw" style="--c:var(--c-europe)"></i>Champions League</span><span><i class="sw" style="--c:var(--away)"></i>Europa League</span>${zonesOf(league).playoff ? '<span><i class="sw" style="--c:var(--gold)"></i>Play-off</span>' : ''}<span><i class="sw" style="--c:var(--crit)"></i>Relegation</span></p></section>
+            <p class="legend zone-key">${zonesOf(league).promo != null ? '<span><i class="sw" style="--c:var(--c-europe)"></i>Promotion</span><span><i class="sw" style="--c:var(--gold)"></i>Play-offs</span>' : `<span><i class="sw" style="--c:var(--c-europe)"></i>Champions League</span><span><i class="sw" style="--c:var(--away)"></i>Europa League</span>${zonesOf(league).playoff ? '<span><i class="sw" style="--c:var(--gold)"></i>Play-off</span>' : ''}`}<span><i class="sw" style="--c:var(--crit)"></i>Relegation</span></p></section>
             ${cupsSide ? '' : `<div class="stack lg-cups">${cups}</div>`}</div>
           <div class="stack ${md ? 'fill' : ''} lg-side" style="--span:5">
             ${md > 1 ? '<section class="panel grow lg-bump-p"><div class="panel-head"><h2>Position by matchday</h2><p class="sub"></p></div><div class="chart" id="lg-bump"></div></section>' : ''}

@@ -4,7 +4,7 @@
   const FC = (window.FC = window.FC || {});
   FC.views = FC.views || {};
   const TABS = [
-    ['home', 'Club Home'], ['calendar', 'Calendar'], ['squad', 'Squad'], ['match', 'Match Centre'], ['stats', 'Stats'],
+    ['home', 'Club Home'], ['news', 'News'], ['calendar', 'Calendar'], ['squad', 'Squad'], ['match', 'Match Centre'], ['stats', 'Stats'],
     ['league', 'League'], ['transfers', 'Transfers'], ['finances', 'Financials'], ['youth', 'Youth Academy'], ['room', 'The Room'], ['leagues', 'Leagues'], ['search', 'Search'],
   ];
 
@@ -24,7 +24,7 @@
         <span class="game-date" title="Current in-game date"><small>In-game date</small><b>${u.date(C.meta.gameDate, 'day')} ${u.parseDate(C.meta.gameDate).getFullYear()}</b></span>
       </div>
       <p class="mast-pill" aria-label="Season, manager and in-game date"><span>${u.esc(C.meta.season)}</span><span>${u.esc(C.meta.manager)}</span><span>${u.date(C.meta.gameDate)}</span></p>`;
-    document.getElementById('tabs').innerHTML = TABS.map(([id, label]) => `<a href="#${id}" data-tab="${id}">${label}</a>`).join('');
+    document.getElementById('tabs').innerHTML = TABS.filter(([id]) => id !== 'news' || (C.news || []).length).map(([id, label]) => `<a href="#${id}" data-tab="${id}">${label}</a>`).join('');
   }
 
   /** Hash = #view[/arg][?p=<playerId>[&c=<clubId>]]. The query opens the player sheet over the view. */
@@ -144,8 +144,16 @@
       fail(err.message);
       throw err;
     }
+    document.title = window.CAREER.club.name;
     const col = (window.CAREER.club.colors || {}).primary;
-    if (col) { document.documentElement.style.setProperty('--red', col); document.documentElement.style.setProperty('--home', col); }
+    if (col) {
+      const css = document.documentElement.style;
+      const rgb = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+      const [r, g, b] = rgb(col);
+      css.setProperty('--red', col); css.setProperty('--home', col); css.setProperty('--c-league', col);
+      css.setProperty('--accent-rgb', `${r}, ${g}, ${b}`);
+      css.setProperty('--red-deep', `rgb(${Math.round(r * 0.62)}, ${Math.round(g * 0.62)}, ${Math.round(b * 0.62)})`);
+    }
     const icon = document.querySelector('link[rel=icon]');
     if (icon && window.CAREER.club.crest) icon.href = window.CAREER.club.crest;
     if (FC.nav) FC.nav.mount();

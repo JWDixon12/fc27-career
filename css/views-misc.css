@@ -148,7 +148,7 @@
 
 /* youth */
 .scout { overflow: hidden; }
-.scout-pin { position: absolute; right: -30px; top: -30px; width: 120px; height: 120px; border-radius: 50%; background: radial-gradient(circle, rgba(218, 41, 28, 0.25), transparent 70%); }
+.scout-pin { position: absolute; right: -30px; top: -30px; width: 120px; height: 120px; border-radius: 50%; background: radial-gradient(circle, rgba(var(--accent-rgb), 0.25), transparent 70%); }
 .scout h2 { font-size: var(--step-2); }
 .scout-region { color: var(--ash); margin: 4px 0 12px; }
 .scout dl { display: flex; gap: 24px; margin: 0; }

@@ -27,7 +27,7 @@
   overflow: hidden;
   border: 1px solid var(--rule);
   border-radius: 8px;
-  background: radial-gradient(120% 70% at 50% 0%, rgba(218, 41, 28, 0.18), transparent 60%), var(--tier);
+  background: radial-gradient(120% 70% at 50% 0%, rgba(var(--accent-rgb), 0.18), transparent 60%), var(--tier);
   text-align: center;
   cursor: pointer;
   transition: transform 0.2s var(--ease), border-color 0.2s;
@@ -102,8 +102,8 @@
   border-bottom: 1px solid var(--rule);
   overflow: hidden;
 }
-.pp-num { position: absolute; left: 110px; top: -40px; font-family: var(--f-display); font-weight: 900; font-size: 15rem; line-height: 1; color: rgba(218, 41, 28, 0.1); pointer-events: none; }
-.pp-face, .pp-head .face-fb { width: 150px; height: 150px; box-shadow: 0 0 0 3px var(--stand), 0 0 0 5px rgba(218, 41, 28, 0.6); }
+.pp-num { position: absolute; left: 110px; top: -40px; font-family: var(--f-display); font-weight: 900; font-size: 15rem; line-height: 1; color: rgba(var(--accent-rgb), 0.1); pointer-events: none; }
+.pp-face, .pp-head .face-fb { width: 150px; height: 150px; box-shadow: 0 0 0 3px var(--stand), 0 0 0 5px rgba(var(--accent-rgb), 0.6); }
 .pp-id { position: relative; min-width: 0; }
 .pp-id h2 { font-size: var(--step-4); font-weight: 900; text-transform: uppercase; margin: 6px 0; }
 .pp-pos { margin: 0; }

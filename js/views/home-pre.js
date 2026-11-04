@@ -13,6 +13,11 @@
 
   /** Newest storyline as one headline linking to The Room. */
   function news() {
+    const N = D().news || [];
+    if (N.length) {
+      return `<section class="sec"><div class="sec-head"><h2>News</h2><a class="sub" href="#news">All stories</a></div>
+        <ol class="news-list">${N.slice(0, 3).map((a) => `<li><a href="#news/${esc(a.slug)}"><span class="nw-meta"><b>${esc(a.kind)}</b><span>${FC.u.date(a.date)}</span></span><b>${esc(a.headline)}</b></a></li>`).join('')}</ol></section>`;
+    }
     const s = [...(D().room.storylines || [])].sort((a, b) => b.updated.localeCompare(a.updated))[0];
     if (!s) return '';
     return `<section class="sec"><div class="sec-head"><h2>News</h2><a class="sub" href="#room">The Room</a></div>

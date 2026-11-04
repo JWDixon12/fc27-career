@@ -87,7 +87,7 @@ main { padding-top: 24px; }
 
 /* ---------- tables: hairlines ---------- */
 table.data th { background: var(--night); color: var(--mute); font-weight: 500; }
-table.data tr.us td { background: rgba(218, 41, 28, 0.08); }
+table.data tr.us td { background: rgba(var(--accent-rgb), 0.08); }
 table.data tbody tr:hover { background: rgba(242, 239, 233, 0.03); }
 
 /* ---------- buttons / controls ---------- */

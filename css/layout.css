@@ -42,7 +42,7 @@
   padding: 12px var(--gutter) 6px;
 }
 .mast-id { display: flex; align-items: center; gap: 14px; text-decoration: none; min-width: 0; }
-.mast-id .mast-crest, .mast-id .crest-fb { width: 48px; height: 48px; filter: drop-shadow(0 0 18px rgba(218, 41, 28, 0.45)); }
+.mast-id .mast-crest, .mast-id .crest-fb { width: 48px; height: 48px; filter: drop-shadow(0 0 18px rgba(var(--accent-rgb), 0.45)); }
 .mast-name { display: flex; flex-direction: column; min-width: 0; }
 .mast-name b {
   font-family: var(--f-display);
